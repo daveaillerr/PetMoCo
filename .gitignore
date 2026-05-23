@@ -38,3 +38,6 @@ plugins/
 .project
 .classpath
 .vscode/
+.vscode/launch.json
+
+.env
