@@ -1,7 +1,9 @@
 # Smart Pet Booking System
+
 ## Complete Project Planning & Documentation Guide
 
 ### Object-Oriented Programming with Database Integration
+
 **Final Project Documentation**
 
 ---
@@ -26,16 +28,20 @@
 ## 1. Executive Summary
 
 ### Project Title
+
 **Smart Pet Booking System** - A centralized appointment management system for pet care services
 
 ### Problem Statement
+
 Many small pet care businesses in the Philippines rely on:
+
 - Handwritten logs and manual record-keeping
 - Walk-in appointments without scheduling
 - Facebook Messenger or chat-based reservations
 - Inconsistent client information management
 
 **These lead to:**
+
 - Scheduling conflicts and double bookings
 - Lost appointment records
 - Duplicate client entries
@@ -43,23 +49,27 @@ Many small pet care businesses in the Philippines rely on:
 - Poor service history tracking
 
 ### Solution
-A Java-based desktop application with MySQL database that provides:
-- **For Pet Owners**: Online booking, pet profile management, appointment history
+
+A Java-based console application with MySQL database that provides:
+
+- **For Pet Owners**: Booking via menu, pet profile management, appointment history
 - **For Employees**: Schedule viewing, appointment management, client information access
 - **For Admins**: Complete system oversight, staff management, reports generation
 
 ### Technology Stack
+
 - **Language**: Java (JDK 8+)
 - **Database**: MySQL 8.0
-- **Interface**: Scanner (Console) + JOptionPane (GUI dialogs)
+- **Interface**: Scanner (Console-based, text-driven menus)
 - **JDBC**: MySQL Connector/J
 - **IDE**: NetBeans / Eclipse / IntelliJ IDEA
 
 ### Project Scope
+
 - **Timeline**: 2 weeks (14 days)
 - **Team Size**: 5 members
   - 3 Backend developers (Database, Logic, CRUD)
-  - 2 UI/UX developers (Interface, User Experience)
+  - 2 UI/UX developers (Console Interface, User Experience)
 - **Deliverables**: Working application + Documentation + Presentation
 
 ---
@@ -69,15 +79,15 @@ A Java-based desktop application with MySQL database that provides:
 ### Core Features (10 Required)
 
 1. **Login Module**
-   - Username/password authentication
+   - Username/password authentication via console input
    - Role-based access (Admin, Employee, Pet Owner)
    - Session management
    - Password validation
 
 2. **Main Menu**
-   - Role-specific menu options
-   - Navigation between features
-   - Modern, clean interface
+   - Role-specific numbered menu options
+   - Navigation between features using Scanner input
+   - Clean, formatted console interface
    - Help/instructions
 
 3. **Add Record**
@@ -110,7 +120,7 @@ A Java-based desktop application with MySQL database that provides:
 
 7. **Delete Record**
    - Cancel appointments
-   - Remove pets (with confirmation)
+   - Remove pets (with confirmation prompt)
    - Deactivate users
    - Archive old records
    - Soft delete implementation
@@ -145,7 +155,7 @@ A Java-based desktop application with MySQL database that provides:
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                    PRESENTATION LAYER                        │
-│  (UI - User Interface)                                       │
+│  (UI - Console Interface)                                    │
 │  - LoginUI.java                                              │
 │  - MenuManager.java                                          │
 │  - AdminUI.java, PetOwnerUI.java, EmployeeUI.java          │
@@ -247,7 +257,7 @@ src/
 
 **Entities and Relationships:**
 
-1. **users** (1) ←→ (1) **pet_owners** 
+1. **users** (1) ←→ (1) **pet_owners**
    - One-to-One relationship
    - A user can be a pet owner
    - Inheritance in database
@@ -290,6 +300,7 @@ src/
 ### Database Tables (7 Tables - Requirement Met ✅)
 
 #### Table 1: users
+
 ```
 Purpose: Base table for authentication and user management
 Fields:
@@ -310,6 +321,7 @@ Indexes:
 ```
 
 #### Table 2: pet_owners
+
 ```
 Purpose: Store pet owner information
 Fields:
@@ -326,6 +338,7 @@ Relationships:
 ```
 
 #### Table 3: employees
+
 ```
 Purpose: Store employee information
 Fields:
@@ -343,6 +356,7 @@ Relationships:
 ```
 
 #### Table 4: pets
+
 ```
 Purpose: Store registered pet information
 Fields:
@@ -364,6 +378,7 @@ Relationships:
 ```
 
 #### Table 5: services
+
 ```
 Purpose: Catalog of available pet care services
 Fields:
@@ -378,6 +393,7 @@ Fields:
 ```
 
 #### Table 6: appointments
+
 ```
 Purpose: Store all appointment bookings
 Fields:
@@ -406,6 +422,7 @@ Indexes:
 ```
 
 #### Table 7: payments
+
 ```
 Purpose: Track payment transactions
 Fields:
@@ -424,19 +441,23 @@ Relationships:
 ### Database Normalization
 
 **1st Normal Form (1NF)**: ✅
+
 - All tables have atomic values
 - No repeating groups
 - Each field contains single value
 
 **2nd Normal Form (2NF)**: ✅
+
 - All non-key attributes fully dependent on primary key
 - No partial dependencies
 
 **3rd Normal Form (3NF)**: ✅
+
 - No transitive dependencies
 - All non-key attributes depend only on primary key
 
 **Example:**
+
 - Pet owner information in separate table (not in appointments)
 - Service details in services table (not duplicated in appointments)
 - User authentication separate from profile details
@@ -450,6 +471,7 @@ Relationships:
 #### 1. Classes and Objects (✅ 8+ Classes)
 
 **Model Classes:**
+
 1. User.java - Base user entity
 2. PetOwner.java - Pet owner entity
 3. Employee.java - Employee entity
@@ -460,6 +482,7 @@ Relationships:
 8. AppointmentStatus.java - Enum class
 
 **How it demonstrates:**
+
 - Each class represents a real-world entity
 - Objects are instances of these classes
 - Example: `PetOwner owner = new PetOwner("Juan", "Cruz", ...);`
@@ -467,6 +490,7 @@ Relationships:
 #### 2. Encapsulation (✅ All Model Classes)
 
 **Implementation:**
+
 ```
 User.java:
 - private int userId;
@@ -478,6 +502,7 @@ User.java:
 ```
 
 **How it demonstrates:**
+
 - All fields are private
 - Access through public getters/setters
 - Data hiding and protection
@@ -486,11 +511,13 @@ User.java:
 #### 3. Constructors (✅ All Model Classes)
 
 **Types Used:**
+
 1. **Default Constructor**: `public User() { ... }`
 2. **Parameterized Constructor**: `public User(String username, String password) { ... }`
 3. **Full Constructor**: For database retrieval with all fields
 
 **Example:**
+
 ```java
 // Default
 public PetOwner() {
@@ -510,6 +537,7 @@ public PetOwner(String firstName, String lastName, ...) {
 **Implementation:**
 
 **Example 1: User Hierarchy**
+
 ```
 User (Base Class)
 ├── PetOwner (Child Class)
@@ -517,6 +545,7 @@ User (Base Class)
 ```
 
 **Code Structure:**
+
 ```java
 public class User {
     protected int userId;
@@ -532,6 +561,7 @@ public class PetOwner extends User {
 ```
 
 **Example 2: DAO Hierarchy**
+
 ```
 BaseDAO<T> (Abstract Base)
 ├── UserDAO
@@ -541,6 +571,7 @@ BaseDAO<T> (Abstract Base)
 ```
 
 **Example 3: Report Hierarchy**
+
 ```
 Report (Abstract Base)
 ├── AppointmentReport
@@ -549,6 +580,7 @@ Report (Abstract Base)
 ```
 
 **How it demonstrates:**
+
 - Child classes inherit parent properties/methods
 - Code reusability
 - IS-A relationship (PetOwner IS-A User)
@@ -557,6 +589,7 @@ Report (Abstract Base)
 #### 5. Polymorphism (✅ Multiple Forms)
 
 **Method Overriding:**
+
 ```java
 // In User class (parent)
 public String getDisplayName() {
@@ -571,6 +604,7 @@ public String getDisplayName() {
 ```
 
 **Polymorphic Behavior:**
+
 ```java
 User user1 = new PetOwner(...);  // Polymorphism
 User user2 = new Employee(...);   // Polymorphism
@@ -581,6 +615,7 @@ System.out.println(user2.getDisplayName());  // Shows employee name
 ```
 
 **Abstract Method Implementation:**
+
 ```java
 // BaseDAO abstract method
 public abstract boolean insert(T entity);
@@ -595,6 +630,7 @@ public boolean insert(Appointment appointment) {
 #### 6. Abstraction (✅ Abstract Classes)
 
 **Example 1: BaseDAO**
+
 ```java
 public abstract class BaseDAO<T> {
     // Abstract methods (must be implemented)
@@ -602,7 +638,7 @@ public abstract class BaseDAO<T> {
     public abstract boolean update(T entity);
     public abstract boolean delete(int id);
     public abstract T findById(int id);
-    
+
     // Concrete methods (shared by all)
     protected int executeUpdate(String sql, Object... params) {
         // Common implementation
@@ -611,14 +647,15 @@ public abstract class BaseDAO<T> {
 ```
 
 **Example 2: Report**
+
 ```java
 public abstract class Report {
     protected String title;
     protected LocalDate generatedDate;
-    
+
     // Abstract method - each report implements differently
     public abstract String generateReport();
-    
+
     // Concrete method - common to all reports
     public void printReport() {
         System.out.println(generateReport());
@@ -627,6 +664,7 @@ public abstract class Report {
 ```
 
 **How it demonstrates:**
+
 - Hides implementation details
 - Forces subclasses to implement specific methods
 - Provides common functionality in base class
@@ -637,6 +675,7 @@ public abstract class Report {
 **Types of Methods:**
 
 **a) Instance Methods:**
+
 ```java
 public String getFullName() {
     return firstName + " " + lastName;
@@ -648,6 +687,7 @@ public void addPet(Pet pet) {
 ```
 
 **b) Static Methods:**
+
 ```java
 public static DatabaseConfig getInstance() {
     return instance;
@@ -659,6 +699,7 @@ public static boolean validateEmail(String email) {
 ```
 
 **c) Constructor Methods:**
+
 ```java
 public PetOwner(String firstName, String lastName) {
     this.firstName = firstName;
@@ -667,12 +708,14 @@ public PetOwner(String firstName, String lastName) {
 ```
 
 **d) Getter/Setter Methods:**
+
 ```java
 public String getFirstName() { return firstName; }
 public void setFirstName(String firstName) { this.firstName = firstName; }
 ```
 
 **e) Business Logic Methods:**
+
 ```java
 public boolean validateCredentials() {
     if (username == null || username.trim().isEmpty()) {
@@ -688,6 +731,7 @@ public boolean validateCredentials() {
 #### 8. Exception Handling (✅ Comprehensive)
 
 **Custom Exception Classes:**
+
 1. DatabaseException.java
 2. ValidationException.java
 3. AuthenticationException.java
@@ -695,6 +739,7 @@ public boolean validateCredentials() {
 5. DuplicateRecordException.java
 
 **Try-Catch Implementation:**
+
 ```java
 public boolean insert(Appointment appointment) throws DatabaseException {
     PreparedStatement stmt = null;
@@ -705,11 +750,11 @@ public boolean insert(Appointment appointment) throws DatabaseException {
         int rows = stmt.executeUpdate();
         commit();
         return rows > 0;
-        
+
     } catch (SQLException e) {
         rollback();
         throw new DatabaseException("Insert failed: " + e.getMessage(), e);
-        
+
     } finally {
         closeStatement(stmt);
     }
@@ -717,6 +762,7 @@ public boolean insert(Appointment appointment) throws DatabaseException {
 ```
 
 **Exception Hierarchy:**
+
 ```
 RuntimeException
 ├── DatabaseException
@@ -731,6 +777,7 @@ RuntimeException
 **Implementation Examples:**
 
 **a) In PetOwner Class:**
+
 ```java
 private List<Pet> pets = new ArrayList<>();
 
@@ -749,6 +796,7 @@ public Pet getPetByName(String name) {
 ```
 
 **b) In DAO Classes:**
+
 ```java
 public List<Appointment> findAll() {
     List<Appointment> appointments = new ArrayList<>();
@@ -761,6 +809,7 @@ public List<Appointment> findAll() {
 ```
 
 **c) Search Results:**
+
 ```java
 public List<String> searchResults(String term) {
     List<String> results = new ArrayList<>();
@@ -792,22 +841,26 @@ public List<String> searchResults(String term) {
 ### Team Allocation
 
 **Backend Team (3 developers):**
+
 - **Developer 1**: Authentication, User Management, Core Models
 - **Developer 2**: Pet Owner, Pet, Service Management
 - **Developer 3**: Appointments, Payments, Reports
 
 **UI/UX Team (2 developers):**
+
 - **Developer 4**: Menu System, Navigation, Validation
-- **Developer 5**: UI Design, User Experience, Polish
+- **Developer 5**: Console UI Design, User Experience, Polish
 
 ### Daily Schedule
 
 **Daily Standup: 9:00 AM** (15 minutes)
+
 - What did I complete yesterday?
 - What will I work on today?
 - Any blockers?
 
 **Integration Sessions:**
+
 - **Day 4 PM**: First integration checkpoint
 - **Day 7 PM**: Mid-sprint integration
 - **Day 11 AM**: Final integration
@@ -818,6 +871,7 @@ public List<String> searchResults(String term) {
 #### Day 1-2: Setup & Architecture
 
 **Backend Team Tasks:**
+
 - [ ] Set up development environment (JDK, MySQL, IDE)
 - [ ] Create project structure and packages
 - [ ] Initialize Git repository
@@ -827,23 +881,26 @@ public List<String> searchResults(String term) {
 - [ ] Create BaseDAO abstract class
 
 **UI/UX Team Tasks:**
-- [ ] Design menu flow diagrams
-- [ ] Create UI mockups (console/JOptionPane)
-- [ ] Define color scheme and formatting
-- [ ] Document UI standards
+
+- [ ] Design console menu flow diagrams
+- [ ] Create console UI mockups (ASCII art layouts)
+- [ ] Define color scheme using ANSI escape codes
+- [ ] Document console UI standards
 - [ ] Plan user journey workflows
 - [ ] Create UIHelper utility class
 
 **Deliverables:**
+
 - ✅ Database created and tables set up
 - ✅ Project structure established
 - ✅ Base classes implemented
-- ✅ UI design document complete
+- ✅ Console UI design document complete
 - ✅ Team coordination established
 
 #### Day 3-4: Core Classes & Database Integration
 
 **Developer 1 Tasks:**
+
 - [ ] Complete User.java (base class)
 - [ ] Implement UserDAO.java
 - [ ] Create AuthenticationService.java
@@ -852,6 +909,7 @@ public List<String> searchResults(String term) {
 - [ ] Implement session management
 
 **Developer 2 Tasks:**
+
 - [ ] Complete PetOwner.java (extends User)
 - [ ] Create Pet.java class
 - [ ] Implement PetOwnerDAO.java
@@ -860,6 +918,7 @@ public List<String> searchResults(String term) {
 - [ ] Test one-to-many relationship
 
 **Developer 3 Tasks:**
+
 - [ ] Complete Service.java class
 - [ ] Complete Employee.java (extends User)
 - [ ] Implement ServiceDAO.java
@@ -868,29 +927,33 @@ public List<String> searchResults(String term) {
 - [ ] Test database connections
 
 **Developer 4 Tasks:**
+
 - [ ] Create MenuManager.java
-- [ ] Implement LoginUI.java
-- [ ] Build main menu structure
+- [ ] Implement LoginUI.java (console-based)
+- [ ] Build main menu structure with Scanner
 - [ ] Add navigation logic
 - [ ] Create ConsoleColors.java utility
 
 **Developer 5 Tasks:**
-- [ ] Design menu borders and formatting
-- [ ] Create loading animations
-- [ ] Implement confirmation dialogs
-- [ ] Add error message formatting
-- [ ] Test UI responsiveness
+
+- [ ] Design menu borders and box-drawing characters
+- [ ] Create console loading animations
+- [ ] Implement text-based confirmation prompts (Y/N)
+- [ ] Add formatted error message display
+- [ ] Test console rendering on target terminals
 
 **Deliverables:**
+
 - ✅ 5+ model classes complete
 - ✅ 3+ DAO classes working
 - ✅ Login system functional
-- ✅ Menu system implemented
+- ✅ Console menu system implemented
 - ✅ First integration successful
 
 #### Day 5-7: Appointments & Business Logic
 
 **Developer 1 Tasks:**
+
 - [ ] Create Appointment.java class
 - [ ] Implement AppointmentDAO.java
 - [ ] Add appointment CRUD operations
@@ -899,6 +962,7 @@ public List<String> searchResults(String term) {
 - [ ] Create status management
 
 **Developer 2 Tasks:**
+
 - [ ] Create Payment.java class
 - [ ] Implement PaymentDAO.java
 - [ ] Link payments to appointments
@@ -906,6 +970,7 @@ public List<String> searchResults(String term) {
 - [ ] Create payment validation
 
 **Developer 3 Tasks:**
+
 - [ ] Implement search functionality
 - [ ] Create filter utilities
 - [ ] Add sorting methods
@@ -913,24 +978,27 @@ public List<String> searchResults(String term) {
 - [ ] Start report generation framework
 
 **Developer 4 Tasks:**
-- [ ] Create appointment booking UI
-- [ ] Implement service selection screen
-- [ ] Add date/time picker interface
-- [ ] Build appointment list view
+
+- [ ] Create appointment booking console flow
+- [ ] Implement numbered service selection screen
+- [ ] Add date/time input with format prompts
+- [ ] Build appointment list table view
 - [ ] Add status update interface
 
 **Developer 5 Tasks:**
-- [ ] Design confirmation screens
-- [ ] Create success/error messages
-- [ ] Add progress indicators
-- [ ] Implement help screens
-- [ ] Polish all UI elements
+
+- [ ] Design confirmation prompt screens
+- [ ] Create formatted success/error messages
+- [ ] Add console progress indicators
+- [ ] Implement help/instructions screens
+- [ ] Polish all console UI elements
 
 **Deliverables:**
+
 - ✅ Appointment system complete
 - ✅ Payment system integrated
 - ✅ Search/filter working
-- ✅ All UI screens done
+- ✅ All console screens done
 - ✅ Mid-sprint integration successful
 
 ### Week 2: Integration, Testing & Documentation
@@ -938,6 +1006,7 @@ public List<String> searchResults(String term) {
 #### Day 8-9: Exception Handling & Validation
 
 **All Backend Developers:**
+
 - [ ] Add try-catch to all DAO methods
 - [ ] Implement custom exception classes
 - [ ] Add transaction rollback
@@ -945,13 +1014,15 @@ public List<String> searchResults(String term) {
 - [ ] Test database error scenarios
 
 **UI/UX Team:**
+
 - [ ] Implement InputValidator.java
-- [ ] Add validation to all input fields
-- [ ] Create user-friendly error messages
+- [ ] Add validation to all Scanner input fields
+- [ ] Create user-friendly inline error messages
 - [ ] Test edge cases
 - [ ] Add input sanitization
 
 **All Team:**
+
 - [ ] Conduct integration testing
 - [ ] Fix discovered bugs
 - [ ] Code review session
@@ -959,6 +1030,7 @@ public List<String> searchResults(String term) {
 - [ ] Refactor duplicate code
 
 **Deliverables:**
+
 - ✅ Exception handling complete
 - ✅ Validation implemented everywhere
 - ✅ System stable
@@ -967,20 +1039,23 @@ public List<String> searchResults(String term) {
 #### Day 10-11: Reports & Advanced Features
 
 **Developer 1 Tasks:**
+
 - [ ] Create Report.java (abstract)
 - [ ] Implement AppointmentReport.java
 - [ ] Create RevenueReport.java
 - [ ] Add CustomerReport.java
-- [ ] Implement report export
+- [ ] Implement text file report export
 
 **Developer 2 Tasks:**
+
 - [ ] Add appointment history feature
 - [ ] Implement staff assignment logic
 - [ ] Create availability checking
-- [ ] Add notification system
-- [ ] Build dashboard view
+- [ ] Add console notification messages
+- [ ] Build dashboard summary view
 
 **Developer 3 Tasks:**
+
 - [ ] Optimize database queries
 - [ ] Add batch operations
 - [ ] Implement caching with HashMap
@@ -988,19 +1063,22 @@ public List<String> searchResults(String term) {
 - [ ] Performance testing
 
 **Developer 4 Tasks:**
-- [ ] Design report viewing UI
+
+- [ ] Design report console view
 - [ ] Create statistics display
-- [ ] Add dashboard interface
+- [ ] Add dashboard summary interface
 - [ ] Implement help system
 
 **Developer 5 Tasks:**
-- [ ] Final UI polish
-- [ ] Add visual feedback
-- [ ] Create loading screens
-- [ ] Test user experience
+
+- [ ] Final console UI polish
+- [ ] Add visual feedback with ANSI colors
+- [ ] Create loading spinner animation
+- [ ] Test user experience end-to-end
 - [ ] Gather feedback
 
 **Deliverables:**
+
 - ✅ Report generation working
 - ✅ Advanced features complete
 - ✅ Collections properly used
@@ -1011,6 +1089,7 @@ public List<String> searchResults(String term) {
 **All Team Tasks:**
 
 **Documentation:**
+
 - [ ] Write Javadoc for all classes
 - [ ] Create user manual
 - [ ] Write technical documentation
@@ -1019,13 +1098,15 @@ public List<String> searchResults(String term) {
 - [ ] Write setup instructions
 
 **Testing:**
+
 - [ ] Create test case document
 - [ ] Test all features thoroughly
-- [ ] Screenshot every feature
+- [ ] Screenshot every console feature
 - [ ] Document test results
 - [ ] Record demo video
 
 **Presentation:**
+
 - [ ] Create PowerPoint slides
 - [ ] Prepare demo script
 - [ ] Practice presentation
@@ -1033,6 +1114,7 @@ public List<String> searchResults(String term) {
 - [ ] Create handout materials
 
 **Defense Preparation:**
+
 - [ ] Review OOP concepts
 - [ ] Practice explaining code
 - [ ] Prepare code walkthrough
@@ -1040,6 +1122,7 @@ public List<String> searchResults(String term) {
 - [ ] Practice as a team
 
 **Deliverables:**
+
 - ✅ Complete documentation package
 - ✅ Presentation ready
 - ✅ Team prepared for defense
@@ -1048,6 +1131,7 @@ public List<String> searchResults(String term) {
 #### Day 14: Final Testing & Submission
 
 **Morning (8:00 AM - 12:00 PM):**
+
 - [ ] Final integration testing
 - [ ] Fix any last bugs
 - [ ] Verify all requirements met
@@ -1055,6 +1139,7 @@ public List<String> searchResults(String term) {
 - [ ] Package all files
 
 **Afternoon (1:00 PM - 5:00 PM):**
+
 - [ ] Create submission package
 - [ ] Write README.md
 - [ ] Verify all documents included
@@ -1063,6 +1148,7 @@ public List<String> searchResults(String term) {
 - [ ] Submit project
 
 **Submission Checklist:**
+
 - [ ] Source code (.java files)
 - [ ] Database schema (.sql)
 - [ ] User manual (PDF)
@@ -1080,26 +1166,31 @@ public List<String> searchResults(String term) {
 
 ### Feature 1: Login Module
 
-**Purpose**: Authenticate users and manage sessions
+**Purpose**: Authenticate users and manage sessions via console
 
-**Inputs:**
+**Inputs (via Scanner):**
+
 - Username (String, required)
 - Password (String, required, min 6 characters)
 
 **Process:**
-1. User enters credentials
-2. System validates format
-3. Check against database
-4. Verify password hash
-5. Load user role
-6. Create session
-7. Redirect to role-specific menu
+
+1. Display login prompt on console
+2. User enters credentials via Scanner
+3. System validates format
+4. Check against database
+5. Verify password hash
+6. Load user role
+7. Create session
+8. Redirect to role-specific menu
 
 **Outputs:**
-- Success: User logged in, session created
-- Failure: Error message displayed
+
+- Success: Clears screen, loads role dashboard
+- Failure: Inline error message, re-prompt
 
 **Validation:**
+
 - Username not empty
 - Password minimum 6 characters
 - User exists in database
@@ -1107,45 +1198,52 @@ public List<String> searchResults(String term) {
 - Account is active
 
 **Exception Handling:**
+
 - DatabaseException: Connection failed
 - AuthenticationException: Invalid credentials
 - ValidationException: Invalid input format
 
 **OOP Concepts:**
+
 - Encapsulation: Password hashing
 - Exception Handling: Try-catch blocks
 - Object creation: User object from database
 
 ### Feature 2: Add Pet Owner Record
 
-**Purpose**: Register new pet owner in system
+**Purpose**: Register new pet owner in system via console prompts
 
-**Inputs:**
+**Inputs (via Scanner, one field at a time):**
+
 - Username (unique, required)
 - Password (min 6 chars)
 - Email (valid format, unique)
 - Phone (10-11 digits)
 - First Name (required)
 - Last Name (required)
-- Address (optional)
-- City (optional)
+- Address (optional, press Enter to skip)
+- City (optional, press Enter to skip)
 - Emergency Contact (required)
 
 **Process:**
-1. Display input form
-2. Validate each field
-3. Check for duplicates (username, email)
-4. Create User record (parent)
-5. Create PetOwner record (child)
-6. Hash password
-7. Insert into database (transaction)
-8. Confirm success
+
+1. Display registration header
+2. Prompt and read each field with Scanner
+3. Validate each field inline
+4. Check for duplicates (username, email)
+5. Create User record (parent)
+6. Create PetOwner record (child)
+7. Hash password
+8. Insert into database (transaction)
+9. Print success confirmation
 
 **Outputs:**
-- Success message with owner ID
-- Error message if validation fails
+
+- Success message with owner ID printed to console
+- Inline error message if validation fails, re-prompt field
 
 **Validation Rules:**
+
 - Email must contain @
 - Phone 10-11 digits only
 - Username minimum 5 characters
@@ -1153,6 +1251,7 @@ public List<String> searchResults(String term) {
 - Required fields not empty
 
 **Database Operations:**
+
 ```sql
 BEGIN TRANSACTION;
 INSERT INTO users (...) VALUES (...);
@@ -1162,20 +1261,22 @@ COMMIT;
 
 ### Feature 3: Book Appointment
 
-**Purpose**: Create new appointment booking
+**Purpose**: Create new appointment booking via step-by-step console prompts
 
 **Workflow:**
-1. Select pet owner (search by name)
-2. Select pet from owner's pets
-3. Choose service from catalog
-4. Pick appointment date
-5. Select time slot
-6. Assign employee (optional)
-7. Calculate price
-8. Add notes
-9. Confirm booking
+
+1. Display numbered list of pet owners, enter ID to select
+2. Display numbered list of owner's pets, enter ID to select
+3. Display numbered service catalog, enter ID to select
+4. Prompt for appointment date (YYYY-MM-DD format)
+5. Prompt for time slot (HH:MM, 09:00-17:00)
+6. Display optional employee list, enter ID or 0 to skip
+7. Show calculated price
+8. Prompt for any notes
+9. Show summary and ask Y/N to confirm booking
 
 **Business Rules:**
+
 - No double booking same employee/time
 - Appointment must be future date
 - Check employee availability
@@ -1184,6 +1285,7 @@ COMMIT;
 - Status starts as PENDING
 
 **Validation:**
+
 - Pet must belong to owner
 - Date not in past
 - Time within business hours
@@ -1192,7 +1294,8 @@ COMMIT;
 
 ### Feature 4: Search Appointments
 
-**Search Criteria:**
+**Search Criteria (chosen from a numbered menu):**
+
 - By owner name (first or last)
 - By pet name
 - By appointment date
@@ -1201,6 +1304,7 @@ COMMIT;
 - By date range
 
 **Implementation:**
+
 ```sql
 SELECT a.*, po.first_name, po.last_name, p.pet_name, s.service_name
 FROM appointments a
@@ -1212,14 +1316,16 @@ ORDER BY a.appointment_date DESC;
 ```
 
 **Display Results:**
-- ID | Owner | Pet | Service | Date | Time | Status | Price
+
+- Formatted table: ID | Owner | Pet | Service | Date | Time | Status | Price
 - Numbered list for selection
-- Option to view details
+- Option to view full details
 - Option to update/cancel
 
 ### Feature 5: Update Appointment
 
 **Updatable Fields:**
+
 - Appointment date
 - Appointment time
 - Service (recalculate price)
@@ -1228,18 +1334,20 @@ ORDER BY a.appointment_date DESC;
 - Notes
 
 **Process:**
-1. Search and select appointment
-2. Display current details
-3. Show update menu
-4. Select field to update
-5. Enter new value
-6. Validate change
-7. Check conflicts (if date/time/employee changed)
+
+1. Search and select appointment via console
+2. Display current details in formatted table
+3. Show numbered update menu
+4. User selects field number to update
+5. Prompt for new value with Scanner
+6. Validate change inline
+7. Check conflicts if date/time/employee changed
 8. Update database
 9. Update timestamp
-10. Confirm success
+10. Print success confirmation
 
 **Status Transitions:**
+
 ```
 PENDING → CONFIRMED
 CONFIRMED → IN_PROGRESS
@@ -1250,17 +1358,20 @@ Any → CANCELLED
 ### Feature 6: Cancel Appointment
 
 **Process:**
-1. Search appointment
-2. Display details
-3. Confirm cancellation
-4. Update status to CANCELLED
-5. Optionally refund payment
-6. Log cancellation
-7. Notify owner (console message)
+
+1. Search and display appointment
+2. Print appointment details to console
+3. Prompt "Are you sure you want to cancel? (Y/N): "
+4. Read Y/N with Scanner
+5. Update status to CANCELLED
+6. Optionally prompt to refund payment
+7. Log cancellation
+8. Print cancellation confirmation
 
 **Validation:**
+
 - Cannot cancel COMPLETED appointments
-- Confirmation required
+- Y/N confirmation required
 - Update payment status if paid
 
 ---
@@ -1269,45 +1380,59 @@ Any → CANCELLED
 
 ### Console Design Standards
 
-**Color Scheme:**
+**Color Scheme (ANSI Escape Codes):**
+
 ```java
 // ConsoleColors.java
-public static final String RESET = "\033[0m";
-public static final String RED = "\033[0;31m";
-public static final String GREEN = "\033[0;32m";
-public static final String YELLOW = "\033[0;33m";
-public static final String BLUE = "\033[0;34m";
-public static final String CYAN = "\033[0;36m";
-public static final String CYAN_BOLD = "\033[1;36m";
+public static final String RESET      = "\033[0m";
+public static final String RED        = "\033[0;31m";
+public static final String GREEN      = "\033[0;32m";
+public static final String YELLOW     = "\033[0;33m";
+public static final String BLUE       = "\033[0;34m";
+public static final String CYAN       = "\033[0;36m";
+public static final String CYAN_BOLD  = "\033[1;36m";
+public static final String WHITE_BOLD = "\033[1;37m";
 ```
 
 **Usage:**
-- **CYAN_BOLD**: Headers, titles
+
+- **CYAN_BOLD**: Headers, titles, borders
 - **GREEN**: Success messages
 - **RED**: Error messages
 - **YELLOW**: Warnings, prompts
-- **BLUE**: Information
+- **BLUE**: Information labels
 - **WHITE**: Regular text
 
 ### Menu Structure
 
 **Main Login Screen:**
+
 ```
 ╔════════════════════════════════════════╗
 ║   🐾 SMART PET BOOKING SYSTEM 🐾     ║
 ╠════════════════════════════════════════╣
-║                                        ║
-║   Username: _____________             ║
-║   Password: _____________             ║
 ║                                        ║
 ║   [1] Login                           ║
 ║   [2] Register as Pet Owner           ║
 ║   [0] Exit                            ║
 ║                                        ║
 ╚════════════════════════════════════════╝
+Enter choice: _
+```
+
+**Login Prompt (after choosing [1]):**
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  LOGIN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Username: _
+  Password: _
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
 **Admin Main Menu:**
+
 ```
 ╔════════════════════════════════════════╗
 ║          ADMIN DASHBOARD              ║
@@ -1325,10 +1450,11 @@ public static final String CYAN_BOLD = "\033[1;36m";
 ║  [0] Logout                           ║
 ║                                        ║
 ╚════════════════════════════════════════╝
-Enter choice:
+Enter choice: _
 ```
 
 **Pet Owner Main Menu:**
+
 ```
 ╔════════════════════════════════════════╗
 ║         PET OWNER DASHBOARD           ║
@@ -1345,84 +1471,118 @@ Enter choice:
 ║  [0] Logout                           ║
 ║                                        ║
 ╚════════════════════════════════════════╝
-Enter choice:
+Enter choice: _
 ```
 
 ### Input Patterns
 
 **Text Input:**
+
 ```
-Enter pet name: _____________
+Enter pet name: _
 ```
 
 **Number Input:**
+
 ```
-Enter pet age (years): _____
+Enter pet age (years): _
 ```
 
 **Selection Menu:**
+
 ```
 Select Pet Species:
-[1] Dog
-[2] Cat
-[3] Bird
-[4] Rabbit
-[5] Other
+  [1] Dog
+  [2] Cat
+  [3] Bird
+  [4] Rabbit
+  [5] Other
 
-Enter choice (1-5): _____
+Enter choice (1-5): _
 ```
 
 **Date Input:**
+
 ```
-Enter appointment date (YYYY-MM-DD): __________
-Example: 2024-06-15
+Enter appointment date (YYYY-MM-DD): _
+  Example: 2024-06-15
 ```
 
-**Confirmation:**
+**Time Input:**
+
 ```
-Are you sure? (Y/N): ____
+Enter appointment time (HH:MM, 09:00 - 17:00): _
+  Example: 10:30
 ```
 
-### JOptionPane Dialogs
+**Y/N Confirmation:**
 
-**Input Dialog:**
+```
+Are you sure you want to proceed? (Y/N): _
+```
+
+### Scanner Input Helper
+
 ```java
-String name = JOptionPane.showInputDialog(
-    null,
-    "Enter pet name:",
-    "Add Pet",
-    JOptionPane.QUESTION_MESSAGE
-);
-```
+// UIHelper.java
+public class UIHelper {
+    private static Scanner scanner = new Scanner(System.in);
 
-**Confirmation Dialog:**
-```java
-int choice = JOptionPane.showConfirmDialog(
-    null,
-    "Are you sure you want to cancel this appointment?",
-    "Confirm Cancellation",
-    JOptionPane.YES_NO_OPTION,
-    JOptionPane.WARNING_MESSAGE
-);
-```
+    public static String readString(String prompt) {
+        System.out.print(prompt);
+        return scanner.nextLine().trim();
+    }
 
-**Selection Dialog:**
-```java
-String[] services = {"Grooming", "Pet Sitting", "Walking"};
-String selected = (String) JOptionPane.showInputDialog(
-    null,
-    "Select service:",
-    "Book Appointment",
-    JOptionPane.QUESTION_MESSAGE,
-    null,
-    services,
-    services[0]
-);
+    public static int readInt(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            try {
+                int val = Integer.parseInt(scanner.nextLine().trim());
+                return val;
+            } catch (NumberFormatException e) {
+                printError("Please enter a valid number.");
+            }
+        }
+    }
+
+    public static boolean readConfirm(String prompt) {
+        while (true) {
+            System.out.print(prompt + " (Y/N): ");
+            String input = scanner.nextLine().trim().toUpperCase();
+            if (input.equals("Y")) return true;
+            if (input.equals("N")) return false;
+            printError("Please enter Y or N.");
+        }
+    }
+
+    public static void printError(String message) {
+        System.out.println(ConsoleColors.RED + "[ERROR] " + message + ConsoleColors.RESET);
+    }
+
+    public static void printSuccess(String message) {
+        System.out.println(ConsoleColors.GREEN + "[OK] " + message + ConsoleColors.RESET);
+    }
+
+    public static void printWarning(String message) {
+        System.out.println(ConsoleColors.YELLOW + "[WARNING] " + message + ConsoleColors.RESET);
+    }
+
+    public static void pressEnterToContinue() {
+        System.out.print("Press Enter to continue...");
+        scanner.nextLine();
+    }
+
+    public static void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
+}
 ```
 
 ### Error Message Format
 
-**Console:**
+**Console (inline):**
+
 ```
 [ERROR] Validation Failed
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1434,40 +1594,49 @@ Expected format: user@domain.com
 Press Enter to continue...
 ```
 
-**JOptionPane:**
+**Code implementation:**
+
 ```java
-JOptionPane.showMessageDialog(
-    null,
-    "Invalid email format!\n\n" +
-    "Expected: user@domain.com\n" +
-    "Entered: " + email,
-    "Validation Error",
-    JOptionPane.ERROR_MESSAGE
-);
+public static void showValidationError(String field, String issue,
+                                       String entered, String expected) {
+    System.out.println(ConsoleColors.RED);
+    System.out.println("[ERROR] Validation Failed");
+    System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    System.out.println("Field   : " + field);
+    System.out.println("Issue   : " + issue);
+    System.out.println("Entered : '" + entered + "'");
+    System.out.println("Expected: " + expected);
+    System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    System.out.print(ConsoleColors.RESET);
+    UIHelper.pressEnterToContinue();
+}
 ```
 
 ### Success Message Format
 
 **Console:**
+
 ```
 ✓ SUCCESS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Appointment booked successfully!
 
-Appointment ID: 12345
-Owner: Maria Santos
-Pet: Max (Golden Retriever)
-Service: Dog Grooming
-Date: 2024-06-15
-Time: 10:00 AM
-Status: CONFIRMED
-Total: ₱800.00
+Appointment ID : 12345
+Owner          : Maria Santos
+Pet            : Max (Golden Retriever)
+Service        : Dog Grooming
+Date           : 2024-06-15
+Time           : 10:00 AM
+Status         : CONFIRMED
+Total          : ₱800.00
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Press Enter to continue...
 ```
 
 ### Loading Animation
 
 **Simple Dots:**
+
 ```
 Processing...
 Processing.
@@ -1475,12 +1644,20 @@ Processing..
 Processing...
 ```
 
-**Spinner:**
-```
-[|] Loading...
-[/] Loading...
-[-] Loading...
-[\] Loading...
+**Spinner (using \r to overwrite same line):**
+
+```java
+public static void showSpinner(String message, int durationMs) throws InterruptedException {
+    String[] frames = {"|", "/", "-", "\\"};
+    long end = System.currentTimeMillis() + durationMs;
+    int i = 0;
+    while (System.currentTimeMillis() < end) {
+        System.out.print("\r" + frames[i % 4] + " " + message);
+        Thread.sleep(100);
+        i++;
+    }
+    System.out.println("\r✓ Done!        ");
+}
 ```
 
 ---
@@ -1490,6 +1667,7 @@ Processing...
 ### Unit Testing Checklist
 
 #### Database Connection Tests
+
 - [ ] Test successful connection
 - [ ] Test connection with wrong credentials
 - [ ] Test connection timeout
@@ -1500,6 +1678,7 @@ Processing...
 **For Each Entity (User, Pet, Appointment, etc.):**
 
 **CREATE (Insert) Tests:**
+
 - [ ] Insert valid record
 - [ ] Insert with missing required field
 - [ ] Insert duplicate (unique constraint)
@@ -1507,6 +1686,7 @@ Processing...
 - [ ] Insert with null values
 
 **READ (Select) Tests:**
+
 - [ ] Find by valid ID
 - [ ] Find by non-existent ID
 - [ ] Find all records
@@ -1514,12 +1694,14 @@ Processing...
 - [ ] Search with wildcard
 
 **UPDATE Tests:**
+
 - [ ] Update valid record
 - [ ] Update non-existent record
 - [ ] Update with invalid data
 - [ ] Update unique field to duplicate
 
 **DELETE Tests:**
+
 - [ ] Delete existing record
 - [ ] Delete non-existent record
 - [ ] Delete with foreign key constraint
@@ -1528,24 +1710,28 @@ Processing...
 #### Validation Tests
 
 **Email Validation:**
+
 - [ ] Valid email: user@domain.com
 - [ ] Invalid: missing @
 - [ ] Invalid: missing domain
 - [ ] Invalid: special characters
 
 **Phone Validation:**
+
 - [ ] Valid: 09171234567 (11 digits)
 - [ ] Valid: 02123456789 (10 digits)
 - [ ] Invalid: letters included
 - [ ] Invalid: too short/long
 
 **Date Validation:**
+
 - [ ] Valid future date
 - [ ] Invalid past date
 - [ ] Invalid format
 - [ ] Leap year handling
 
 **Required Field Validation:**
+
 - [ ] All required fields present
 - [ ] Missing required field
 - [ ] Empty string in required field
@@ -1554,6 +1740,7 @@ Processing...
 #### Business Logic Tests
 
 **Appointment Booking:**
+
 - [ ] Book with all valid data
 - [ ] Book with conflicting time
 - [ ] Book in the past
@@ -1562,12 +1749,14 @@ Processing...
 - [ ] Book without available employee
 
 **Payment Processing:**
+
 - [ ] Process valid payment
 - [ ] Process with insufficient amount
 - [ ] Process duplicate payment
 - [ ] Refund completed payment
 
 **Search Functionality:**
+
 - [ ] Search with valid term
 - [ ] Search with no results
 - [ ] Search with wildcard
@@ -1578,60 +1767,69 @@ Processing...
 **Test Scenarios:**
 
 **Scenario 1: Complete Booking Flow**
-1. Login as pet owner
-2. Navigate to booking
-3. Select pet
-4. Choose service
-5. Pick date/time
-6. Confirm booking
+
+1. Login as pet owner via console
+2. Navigate to booking via menu
+3. Select pet from numbered list
+4. Choose service from numbered catalog
+5. Enter date/time via prompts
+6. Confirm booking with Y
 7. Make payment
 8. Verify in database
-9. Generate receipt
+9. View receipt on console
 
 **Scenario 2: Update Flow**
+
 1. Login as employee
-2. Search appointment
-3. View details
-4. Update status
-5. Assign employee
+2. Search appointment via console search
+3. View details in formatted table
+4. Select field to update from menu
+5. Enter new value
 6. Save changes
 7. Verify in database
 
 **Scenario 3: Cancel Flow**
+
 1. Login as admin
-2. Find appointment
-3. Cancel with reason
-4. Process refund
-5. Notify owner
-6. Verify status change
+2. Find appointment via search
+3. Select cancel option from menu
+4. Confirm with Y prompt
+5. Process refund
+6. View confirmation message
+7. Verify status change
 
 ### User Acceptance Testing (UAT)
 
 **Test Cases:**
 
 **TC-001: Pet Owner Registration**
-- **Given**: New user wants to register
-- **When**: User fills registration form
+
+- **Given**: New user wants to register via console
+- **When**: User fills registration prompts one by one
 - **Then**: Account created, can login
 
 **TC-002: Book Appointment**
+
 - **Given**: Pet owner logged in with registered pet
-- **When**: User books grooming service
+- **When**: User books grooming service via console menu
 - **Then**: Appointment created with PENDING status
 
 **TC-003: Employee Views Schedule**
+
 - **Given**: Employee logged in
 - **When**: Employee checks today's appointments
-- **Then**: List shows all assigned appointments
+- **Then**: List shows all assigned appointments in formatted table
 
 **TC-004: Generate Report**
+
 - **Given**: Admin logged in
 - **When**: Admin generates monthly revenue report
-- **Then**: Report shows all payments for the month
+- **Then**: Report printed to console showing all payments for the month
 
 ### Test Data
 
 **Sample Pet Owners:**
+
 ```
 Owner 1: Maria Santos
 - Username: maria_santos
@@ -1647,6 +1845,7 @@ Owner 2: Juan Cruz
 ```
 
 **Sample Appointments:**
+
 ```
 Appointment 1:
 - Owner: Maria Santos
@@ -1667,13 +1866,14 @@ Appointment 2:
 
 ### Bug Tracking Template
 
-| ID | Date | Tester | Description | Severity | Status | Fixed By |
-|----|------|--------|-------------|----------|--------|----------|
-| B001 | 06/10 | Dev4 | Login crashes on empty password | High | Open | Dev1 |
-| B002 | 06/11 | Dev5 | Date picker shows past dates | Medium | Fixed | Dev4 |
-| B003 | 06/12 | Dev1 | Duplicate username not caught | High | Fixed | Dev1 |
+| ID   | Date  | Tester | Description                     | Severity | Status | Fixed By |
+| ---- | ----- | ------ | ------------------------------- | -------- | ------ | -------- |
+| B001 | 06/10 | Dev4   | Login crashes on empty password | High     | Open   | Dev1     |
+| B002 | 06/11 | Dev5   | Date input accepts past dates   | Medium   | Fixed  | Dev4     |
+| B003 | 06/12 | Dev1   | Duplicate username not caught   | High     | Fixed  | Dev1     |
 
 **Severity Levels:**
+
 - **Critical**: System crash, data loss
 - **High**: Feature doesn't work
 - **Medium**: Feature works but with issues
@@ -1687,15 +1887,17 @@ Appointment 2:
 
 #### 1. Appointment Report
 
-**Purpose**: View all appointments within date range
+**Purpose**: View all appointments within date range, printed to console
 
-**Parameters:**
+**Parameters (prompted via Scanner):**
+
 - Start Date
 - End Date
-- Status filter (optional)
-- Employee filter (optional)
+- Status filter (optional, press Enter to skip)
+- Employee filter (optional, press Enter to skip)
 
 **Output Format:**
+
 ```
 ╔══════════════════════════════════════════════════════════╗
 ║            APPOINTMENT REPORT                            ║
@@ -1720,8 +1922,9 @@ Appointment 2:
 ```
 
 **SQL Query:**
+
 ```sql
-SELECT 
+SELECT
     a.appointment_id,
     a.appointment_date,
     p.pet_name,
@@ -1737,19 +1940,22 @@ ORDER BY a.appointment_date DESC;
 
 #### 2. Revenue Report
 
-**Purpose**: Financial summary for accounting
+**Purpose**: Financial summary printed to console
 
-**Parameters:**
+**Parameters (prompted via Scanner):**
+
 - Month/Year
 - Payment method filter (optional)
 
 **Calculations:**
+
 - Total Revenue = SUM(payments.amount)
 - Average Per Appointment = Total / Count
 - Revenue by Service Type
 - Revenue by Payment Method
 
 **Output:**
+
 ```
 ╔══════════════════════════════════════════════════════════╗
 ║               MONTHLY REVENUE REPORT                      ║
@@ -1791,9 +1997,10 @@ Generated By: Admin User
 
 #### 3. Customer Activity Report
 
-**Purpose**: Track customer engagement
+**Purpose**: Track customer engagement, printed to console
 
 **Metrics:**
+
 - Total customers registered
 - Active customers (booked in period)
 - New customers
@@ -1802,6 +2009,7 @@ Generated By: Admin User
 - Top 10 customers by bookings
 
 **Output:**
+
 ```
 ╔══════════════════════════════════════════════════════════╗
 ║          CUSTOMER ACTIVITY REPORT                         ║
@@ -1827,29 +2035,22 @@ Generated By: Admin User
 ║  5.  Sofia Lim         2     3         ₱4,500.00       ║
 ║  ...                                                     ║
 ║                                                          ║
-║  NEW CUSTOMERS THIS MONTH                                ║
-║  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  ║
-║  Name              Registration Date    First Booking   ║
-║  ──────────────────────────────────────────────────────║
-║  Carlos Tan        2024-06-03          2024-06-05      ║
-║  Lisa Wong         2024-06-07          2024-06-09      ║
-║  ...                                                     ║
-║                                                          ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
 #### 4. Employee Performance Report
 
-**Purpose**: Track employee productivity
+**Purpose**: Track employee productivity, printed to console
 
 **Metrics:**
+
 - Appointments handled
 - Revenue generated
-- Average rating (if implemented)
-- Punctuality
-- Customer satisfaction
+- Appointment completion rate
+- Weekly distribution
 
 **Output:**
+
 ```
 ╔══════════════════════════════════════════════════════════╗
 ║        EMPLOYEE PERFORMANCE REPORT                        ║
@@ -1868,34 +2069,26 @@ Generated By: Admin User
 ║  Revenue Generated: ₱22,400.00                          ║
 ║  Average per Appointment: ₱800.00                        ║
 ║                                                          ║
-║  APPOINTMENT BREAKDOWN                                   ║
-║  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  ║
-║  Dog Grooming: 20 appointments                           ║
-║  Cat Grooming: 8 appointments                            ║
-║                                                          ║
-║  WEEKLY DISTRIBUTION                                     ║
-║  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  ║
-║  Week 1:  6 appointments                                 ║
-║  Week 2:  8 appointments                                 ║
-║  Week 3:  7 appointments                                 ║
-║  Week 4:  7 appointments                                 ║
-║                                                          ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
 ### Export Options
 
 **1. Console Display** (default)
-- Print to screen
-- User can view immediately
+
+- Print formatted report to screen
+- User views immediately, can scroll terminal
 
 **2. Text File Export**
+
 ```java
 public void exportToFile(String report, String filename) {
     try (BufferedWriter writer = new BufferedWriter(
             new FileWriter("reports/" + filename + ".txt"))) {
         writer.write(report);
-        System.out.println("Report saved to: reports/" + filename + ".txt");
+        System.out.println(ConsoleColors.GREEN +
+            "Report saved to: reports/" + filename + ".txt" +
+            ConsoleColors.RESET);
     } catch (IOException e) {
         throw new DatabaseException("Export failed: " + e.getMessage(), e);
     }
@@ -1903,6 +2096,7 @@ public void exportToFile(String report, String filename) {
 ```
 
 **3. CSV Export** (bonus feature)
+
 ```java
 public void exportToCSV(List<Appointment> appointments, String filename) {
     try (PrintWriter writer = new PrintWriter("reports/" + filename + ".csv")) {
@@ -1917,6 +2111,9 @@ public void exportToCSV(List<Appointment> appointments, String filename) {
                 apt.getTotalPrice()
             );
         }
+        System.out.println(ConsoleColors.GREEN +
+            "CSV saved to: reports/" + filename + ".csv" +
+            ConsoleColors.RESET);
     }
 }
 ```
@@ -1931,11 +2128,12 @@ public void exportToCSV(List<Appointment> appointments, String filename) {
 
 **Q1: What is your system about?**
 
-**A:** Our Smart Pet Booking System is a centralized appointment management system designed for pet care businesses in the Philippines. It replaces manual booking methods like handwritten logs and Facebook Messenger reservations with an organized, database-driven solution. The system allows pet owners to register their pets and book appointments, while employees and administrators can manage schedules, track service history, and generate reports. It solves problems like scheduling conflicts, lost records, and duplicate client information.
+**A:** Our Smart Pet Booking System is a centralized appointment management system designed for pet care businesses in the Philippines. It replaces manual booking methods like handwritten logs and Facebook Messenger reservations with an organized, database-driven console application. Pet owners interact through a text-based menu system, while employees and administrators can manage schedules, track service history, and generate reports. It solves problems like scheduling conflicts, lost records, and duplicate client information.
 
 **Q2: Why did you choose this topic?**
 
 **A:** We chose this topic because:
+
 1. Many small pet care businesses in the Philippines still use manual systems
 2. We saw a real need for affordable, accessible booking solutions
 3. It demonstrates all required OOP concepts naturally
@@ -1945,6 +2143,7 @@ public void exportToCSV(List<Appointment> appointments, String filename) {
 **Q3: Who are the target users?**
 
 **A:** Our system has three types of users:
+
 1. **Pet Owners**: Register pets, book appointments, view history
 2. **Employees**: View schedules, update appointment status, access client information
 3. **Administrators**: Complete system access, manage all records, generate reports
@@ -1954,6 +2153,7 @@ public void exportToCSV(List<Appointment> appointments, String filename) {
 **Q4: Explain your database design.**
 
 **A:** We have 7 tables following 3NF (Third Normal Form):
+
 1. **users** - Base table for authentication (stores username, password, role)
 2. **pet_owners** - Extends users, stores owner details (one-to-one with users)
 3. **employees** - Extends users, stores employee details (one-to-one with users)
@@ -1963,6 +2163,7 @@ public void exportToCSV(List<Appointment> appointments, String filename) {
 7. **payments** - Payment transactions (one-to-one with appointments)
 
 The relationships are:
+
 - One owner can have many pets
 - One pet can have many appointments
 - One service can be booked many times
@@ -1973,6 +2174,7 @@ The relationships are:
 **A:** We implemented inheritance in three places:
 
 1. **User Hierarchy** (most important):
+
 ```
 User (base class with username, password, email)
   ├─ PetOwner extends User (adds firstName, lastName, address)
@@ -1980,6 +2182,7 @@ User (base class with username, password, email)
 ```
 
 2. **DAO Hierarchy**:
+
 ```
 BaseDAO<T> (abstract class with common database methods)
   ├─ UserDAO extends BaseDAO<User>
@@ -1988,6 +2191,7 @@ BaseDAO<T> (abstract class with common database methods)
 ```
 
 3. **Report Hierarchy**:
+
 ```
 Report (abstract class with generateReport() method)
   ├─ AppointmentReport extends Report
@@ -2000,6 +2204,7 @@ Report (abstract class with generateReport() method)
 **A:** We use polymorphism in several ways:
 
 1. **Method Overriding**:
+
 ```java
 // In User class
 public String getDisplayName() {
@@ -2014,6 +2219,7 @@ public String getDisplayName() {
 ```
 
 2. **Abstract Method Implementation**:
+
 ```java
 // BaseDAO declares abstract method
 public abstract boolean insert(T entity);
@@ -2024,6 +2230,7 @@ public abstract boolean insert(T entity);
 ```
 
 3. **Polymorphic References**:
+
 ```java
 User user = new PetOwner(...);  // Parent reference, child object
 System.out.println(user.getDisplayName());  // Calls PetOwner version
@@ -2055,13 +2262,14 @@ System.out.println(user.getDisplayName());  // Calls PetOwner version
 5. **DuplicateRecordException** - Unique constraint violations
 
 Example usage:
+
 ```java
 try {
     appointmentDAO.insert(appointment);
 } catch (ValidationException e) {
-    System.err.println("Invalid data: " + e.getMessage());
+    UIHelper.printError("Invalid data: " + e.getMessage());
 } catch (DatabaseException e) {
-    System.err.println("Database error: " + e.getMessage());
+    UIHelper.printError("Database error: " + e.getMessage());
     rollback();
 } finally {
     closeConnection();
@@ -2075,6 +2283,7 @@ Every DAO method has try-catch blocks and throws appropriate exceptions.
 **A:** We use ArrayList extensively:
 
 1. **In Models**:
+
 ```java
 public class PetOwner {
     private List<Pet> pets = new ArrayList<>();  // Owner's pets
@@ -2082,6 +2291,7 @@ public class PetOwner {
 ```
 
 2. **In DAOs** (search results):
+
 ```java
 public List<Appointment> findAll() {
     List<Appointment> appointments = new ArrayList<>();
@@ -2091,6 +2301,7 @@ public List<Appointment> findAll() {
 ```
 
 3. **In Services** (filtering):
+
 ```java
 List<Appointment> filtered = new ArrayList<>();
 for (Appointment apt : allAppointments) {
@@ -2110,12 +2321,12 @@ public class Pet {
     private int petId;
     private String petName;
     private int ownerId;
-    
+
     // Public getters - controlled read access
     public int getPetId() {
         return petId;
     }
-    
+
     // Public setters - controlled write access with validation
     public void setPetName(String petName) {
         if (petName == null || petName.trim().isEmpty()) {
@@ -2127,6 +2338,7 @@ public class Pet {
 ```
 
 Benefits:
+
 - Fields cannot be directly accessed/modified
 - Validation in setters ensures data integrity
 - Internal implementation can change without affecting other code
@@ -2135,11 +2347,11 @@ Benefits:
 
 **Q11: What's the difference between inheritance and polymorphism?**
 
-**A:** 
+**A:**
+
 - **Inheritance** = Relationship between classes (IS-A)
   - Example: PetOwner IS-A User
   - Code reuse - child gets parent's properties/methods
-  
 - **Polymorphism** = Different behavior with same interface
   - Example: `user.getDisplayName()` behaves differently depending on type
   - Runtime decision - which method to call decided at runtime
@@ -2149,6 +2361,7 @@ Both work together - we need inheritance to enable polymorphism.
 **Q12: Why use abstract classes instead of regular classes?**
 
 **A:** Abstract classes provide:
+
 1. **Template/Blueprint** - Define structure without implementation
 2. **Force Implementation** - Subclasses MUST implement abstract methods
 3. **Share Common Code** - Concrete methods shared by all children
@@ -2159,47 +2372,41 @@ Example: BaseDAO provides executeUpdate() for all DAOs, but each DAO must implem
 **Q13: What's the difference between private, protected, and public?**
 
 **A:**
+
 - **private**: Only within same class
   - Example: `private int userId` in User
-  
 - **protected**: Within same class + subclasses
   - Example: `protected Connection connection` in BaseDAO
   - Child DAOs can access it
-  
 - **public**: Accessible everywhere
   - Example: `public String getUsername()` can be called from UI
 
-**Q14: Why use interfaces vs abstract classes?**
-
-**A:** We didn't use interfaces in this project, but the difference is:
-- **Abstract Class**: Can have both abstract AND concrete methods, can have fields
-- **Interface**: Only abstract methods (Java 8+ allows default methods)
-- **When to use**: 
-  - Abstract class when sharing code (like BaseDAO)
-  - Interface when defining contract only
-
 #### Implementation Questions
 
-**Q15: How does your login system work?**
+**Q14: How does your login system work?**
 
 **A:** Login flow:
-1. User enters username and password
-2. System validates format (username not empty, password min 6 chars)
-3. Query database: `SELECT * FROM users WHERE username = ?`
-4. Compare entered password with stored password (hashed)
-5. If match, load user role (ADMIN/EMPLOYEE/PET_OWNER)
-6. Create session object
-7. Redirect to role-specific menu
-8. Update last_login timestamp
+
+1. Display login prompt on console
+2. Read username and password with Scanner
+3. Validate format (username not empty, password min 6 chars)
+4. Query database: `SELECT * FROM users WHERE username = ?`
+5. Compare entered password with stored password (hashed)
+6. If match, load user role (ADMIN/EMPLOYEE/PET_OWNER)
+7. Create session object
+8. Clear screen and load role-specific dashboard menu
+9. Update last_login timestamp
 
 Security:
+
 - Passwords are hashed (not stored plain text)
 - SQL injection prevented using PreparedStatement
 - Account lockout after 5 failed attempts
 
-**Q16: How do you prevent double booking?**
+**Q15: How do you prevent double booking?**
 
 **A:** Before inserting appointment, we check:
+
 ```java
 private boolean hasConflict(Appointment appointment) {
     String sql = "SELECT COUNT(*) FROM appointments " +
@@ -2211,13 +2418,14 @@ private boolean hasConflict(Appointment appointment) {
 }
 ```
 
-If conflict found, throw ValidationException with message: "Time slot already booked"
+If conflict found, print error to console: "Time slot already booked" and re-prompt the user.
 
-**Q17: How do you handle database errors?**
+**Q16: How do you handle database errors?**
 
 **A:** Three-layer error handling:
 
 1. **DAO Layer** - Catches SQLException, throws custom exception:
+
 ```java
 try {
     stmt.executeUpdate();
@@ -2227,6 +2435,7 @@ try {
 ```
 
 2. **Service Layer** - Catches DAO exceptions, adds context:
+
 ```java
 try {
     appointmentDAO.insert(apt);
@@ -2235,23 +2444,25 @@ try {
 }
 ```
 
-3. **UI Layer** - Catches all exceptions, shows user-friendly message:
+3. **UI Layer** - Catches all exceptions, prints user-friendly message:
+
 ```java
 try {
     service.bookAppointment(...);
-    showSuccess("Appointment booked!");
+    UIHelper.printSuccess("Appointment booked!");
 } catch (Exception e) {
-    showError("Booking failed: " + e.getMessage());
+    UIHelper.printError("Booking failed: " + e.getMessage());
 }
 ```
 
-**Q18: What's your database connection strategy?**
+**Q17: What's your database connection strategy?**
 
 **A:** We use Singleton Pattern in DatabaseConfig:
+
 ```java
 public class DatabaseConfig {
     private static Connection connection = null;
-    
+
     public static Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
             // Read from config.properties
@@ -2263,23 +2474,25 @@ public class DatabaseConfig {
 ```
 
 Benefits:
+
 - Single shared connection (not opening/closing repeatedly)
 - Efficient resource usage
 - Centralized configuration
 
-**Q19: How do you validate user input?**
+**Q18: How do you validate user input?**
 
 **A:** We have InputValidator utility class:
+
 ```java
 public class InputValidator {
     public static boolean isValidEmail(String email) {
         return email != null && email.contains("@") && email.contains(".");
     }
-    
+
     public static boolean isValidPhone(String phone) {
         return phone != null && phone.matches("\\d{10,11}");
     }
-    
+
     public static boolean isValidDate(String date) {
         try {
             LocalDate.parse(date);
@@ -2291,21 +2504,23 @@ public class InputValidator {
 }
 ```
 
-Used before every database operation.
+Used before every database operation. Invalid input prints an error via UIHelper and re-prompts the user with Scanner.
 
-**Q20: Can you trace the code flow for booking an appointment?**
+**Q19: Can you trace the code flow for booking an appointment?**
 
 **A:** Complete flow:
 
 1. **UI Layer** (PetOwnerUI.java):
+
    ```
-   User clicks "Book Appointment"
-   → Display service selection menu
-   → Collect date, time, pet selection
+   User selects [1] Book Appointment from console menu
+   → Display numbered service list, read selection with Scanner
+   → Prompt for date, time, pet selection via Scanner
    → Call appointmentService.bookAppointment(...)
    ```
 
 2. **Service Layer** (AppointmentService.java):
+
    ```
    → Validate all inputs
    → Check for conflicts
@@ -2314,6 +2529,7 @@ Used before every database operation.
    ```
 
 3. **DAO Layer** (AppointmentDAO.java):
+
    ```
    → Begin transaction
    → Execute INSERT SQL
@@ -2324,72 +2540,80 @@ Used before every database operation.
 
 4. **Back to UI**:
    ```
-   → Display success message
-   → Show appointment details
+   → UIHelper.printSuccess(...)
+   → Print appointment summary table to console
+   → UIHelper.pressEnterToContinue()
    → Return to main menu
    ```
 
 #### Challenges & Solutions
 
-**Q21: What was the biggest challenge?**
+**Q20: What was the biggest challenge?**
 
-**A:** Database relationships and foreign key constraints. Initially, we couldn't delete a pet owner because they had appointments. 
+**A:** Database relationships and foreign key constraints. Initially, we couldn't delete a pet owner because they had appointments.
 
 **Solution:** We used:
+
 - `ON DELETE CASCADE` for pets (delete owner → delete their pets)
 - `ON DELETE SET NULL` for employee_id in appointments (delete employee → appointments remain but unassigned)
 - Soft deletes for important records (set is_active = false instead of DELETE)
 
-**Q22: How did you divide the work?**
+**Q21: How did you divide the work?**
 
 **A:** We divided by layers and features:
+
 - **Dev 1**: Authentication, User management, Base classes
 - **Dev 2**: Pet Owner, Pet, Service modules
 - **Dev 3**: Appointments, Payments, Reports
-- **Dev 4**: Menu system, Navigation, UI flow
-- **Dev 5**: UI design, Validation, Polish
+- **Dev 4**: Menu system, Navigation, console UI flow
+- **Dev 5**: Console UI design (colors, formatting), Validation, Polish
 
 We integrated daily to catch conflicts early.
 
-**Q23: What would you improve if you had more time?**
+**Q22: What would you improve if you had more time?**
 
 **A:**
+
 1. **Email notifications** - Send confirmation emails
 2. **SMS reminders** - Text reminders day before appointment
 3. **Online payment** - Integrate payment gateway
-4. **Calendar view** - Visual calendar instead of text list
-5. **Photo upload** - Upload pet photos
+4. **Calendar view** - ASCII calendar view instead of plain list
+5. **Photo upload** - Upload and store pet photo paths
 6. **Rating system** - Customer can rate employees
-7. **Mobile app** - Android/iOS version
-8. **Dashboard charts** - Visual graphs for reports
+7. **GUI upgrade** - JavaFX or Swing desktop interface
+8. **Dashboard charts** - ASCII bar charts for reports
 
 #### Demonstration Questions
 
-**Q24: Can you show us the login process?**
+**Q23: Can you show us the login process?**
 
 **A:** [Live demonstration]
-1. Run Main.java
-2. Enter username: "maria_santos"
-3. Enter password: "password123"
-4. Show successful login
-5. Display pet owner dashboard
-6. Show menu options
 
-**Q25: Can you demonstrate error handling?**
+1. Run Main.java in terminal
+2. System displays login/register menu
+3. Enter choice: 1 (Login)
+4. Enter username: "maria_santos"
+5. Enter password: "password123"
+6. Console clears and shows pet owner dashboard
+7. Show menu options
+
+**Q24: Can you demonstrate error handling?**
 
 **A:** [Live demonstration]
+
 1. Try to book appointment with past date
-   → Show error: "Appointment date cannot be in the past"
+   → Console prints: "[ERROR] Appointment date cannot be in the past"
 2. Try to register with existing username
-   → Show error: "Username already exists"
+   → Console prints: "[ERROR] Username already exists"
 3. Try to login with wrong password
-   → Show error: "Invalid credentials"
+   → Console prints: "[ERROR] Invalid credentials"
 
-**Q26: Can you show a database query?**
+**Q25: Can you show a database query?**
 
 **A:** [Open MySQL Workbench]
+
 ```sql
-SELECT 
+SELECT
     a.appointment_id,
     CONCAT(po.first_name, ' ', po.last_name) AS owner_name,
     p.pet_name,
@@ -2406,17 +2630,17 @@ ORDER BY a.appointment_date;
 
 #### Project Requirements Checklist
 
-**Q27: How do you meet all the requirements?**
+**Q26: How do you meet all the requirements?**
 
 **A:**
 ✅ **Language**: Java (JDK 11)
-✅ **Interface**: Scanner (console) + JOptionPane (GUI dialogs)
+✅ **Interface**: Scanner (console-based, fully text-driven)
 ✅ **Database**: MySQL 8.0
 ✅ **OOP Principles**: All demonstrated (inheritance, polymorphism, encapsulation, abstraction)
-✅ **Menu-driven**: MenuManager with role-based menus
+✅ **Menu-driven**: MenuManager with role-based numbered menus
 ✅ **CRUD**: All entities have Create, Read, Update, Delete
 ✅ **Exception Handling**: 5 custom exception classes + try-catch everywhere
-✅ **Input Validation**: InputValidator utility + validation in setters
+✅ **Input Validation**: InputValidator utility + validation in setters + re-prompt on error
 ✅ **5+ Classes**: 45+ classes total
 ✅ **3+ Tables**: 7 database tables
 ✅ **10 Features**: All required features implemented
@@ -2432,30 +2656,35 @@ ORDER BY a.appointment_date;
 #### Naming Conventions
 
 **Classes**: PascalCase
+
 ```java
 public class PetOwner { }
 public class AppointmentService { }
 ```
 
 **Methods**: camelCase
+
 ```java
 public void bookAppointment() { }
 public String getDisplayName() { }
 ```
 
 **Variables**: camelCase
+
 ```java
 private int appointmentId;
 private String firstName;
 ```
 
 **Constants**: UPPER_SNAKE_CASE
+
 ```java
 public static final int MAX_APPOINTMENTS = 100;
 public static final String DATE_FORMAT = "yyyy-MM-DD";
 ```
 
 **Packages**: lowercase
+
 ```java
 package dao;
 package utils;
@@ -2464,15 +2693,16 @@ package utils;
 #### Code Documentation
 
 **Class Javadoc:**
+
 ```java
 /**
  * PetOwner class - Represents a pet owner in the system
- * 
+ *
  * This class extends the User base class and adds pet owner specific
  * information such as personal details and pet collection management.
- * 
+ *
  * Demonstrates: Inheritance, Collections, Polymorphism
- * 
+ *
  * @author Smart Pet Booking Team
  * @version 1.0
  * @since 2024-06-01
@@ -2483,13 +2713,11 @@ public class PetOwner extends User {
 ```
 
 **Method Javadoc:**
+
 ```java
 /**
  * Book a new appointment for a pet
- * 
- * This method validates the booking details, checks for conflicts,
- * and creates a new appointment record in the database.
- * 
+ *
  * @param petId The ID of the pet for the appointment
  * @param serviceId The ID of the requested service
  * @param date The appointment date (must be future date)
@@ -2498,111 +2726,40 @@ public class PetOwner extends User {
  * @throws ValidationException if input data is invalid
  * @throws DatabaseException if database operation fails
  */
-public Appointment bookAppointment(int petId, int serviceId, 
-                                   LocalDate date, LocalTime time) 
+public Appointment bookAppointment(int petId, int serviceId,
+                                   LocalDate date, LocalTime time)
         throws ValidationException, DatabaseException {
     // ...
-}
-```
-
-#### Code Structure Best Practices
-
-**1. Single Responsibility**
-```java
-// GOOD - Each class has one purpose
-public class Pet { }  // Represents pet data
-public class PetDAO { }  // Handles pet database operations
-public class PetService { }  // Handles pet business logic
-
-// BAD - Class doing too much
-public class Pet {
-    // Data fields
-    // Database operations
-    // UI methods
-    // Validation
-    // Everything mixed together
-}
-```
-
-**2. DRY (Don't Repeat Yourself)**
-```java
-// GOOD - Reusable method
-public void displayAppointment(Appointment apt) {
-    System.out.printf("ID: %d | Date: %s | Status: %s%n",
-        apt.getId(), apt.getDate(), apt.getStatus());
-}
-
-// Use it everywhere
-displayAppointment(appointment1);
-displayAppointment(appointment2);
-
-// BAD - Duplicate code
-System.out.printf("ID: %d | Date: %s | Status: %s%n", ...);
-System.out.printf("ID: %d | Date: %s | Status: %s%n", ...);
-```
-
-**3. Proper Error Messages**
-```java
-// GOOD - Helpful error message
-if (petName == null || petName.trim().isEmpty()) {
-    throw new ValidationException(
-        "Pet name is required. Please enter a valid name.");
-}
-
-// BAD - Vague error
-if (petName == null) {
-    throw new Exception("Error");
-}
-```
-
-**4. Resource Cleanup**
-```java
-// GOOD - Always close resources
-public List<Pet> findAll() {
-    ResultSet rs = null;
-    PreparedStatement stmt = null;
-    try {
-        stmt = connection.prepareStatement(sql);
-        rs = stmt.executeQuery();
-        // ... process results
-    } catch (SQLException e) {
-        throw new DatabaseException("Query failed", e);
-    } finally {
-        closeResultSet(rs);
-        closeStatement(stmt);
-    }
 }
 ```
 
 ### Design Pattern Examples
 
 #### 1. Singleton Pattern (DatabaseConfig)
+
 ```java
 public class DatabaseConfig {
     private static DatabaseConfig instance = null;
     private Connection connection;
-    
-    // Private constructor
+
     private DatabaseConfig() throws SQLException {
-        // Load config from properties file
         Properties props = new Properties();
         props.load(new FileInputStream("config.properties"));
-        
+
         String url = props.getProperty("db.url");
         String user = props.getProperty("db.user");
         String password = props.getProperty("db.password");
-        
+
         connection = DriverManager.getConnection(url, user, password);
     }
-    
-    // Public accessor
+
     public static DatabaseConfig getInstance() throws SQLException {
         if (instance == null) {
             instance = new DatabaseConfig();
         }
         return instance;
     }
-    
+
     public Connection getConnection() {
         return connection;
     }
@@ -2610,33 +2767,35 @@ public class DatabaseConfig {
 ```
 
 #### 2. Factory Pattern (Report Generation)
+
 ```java
 public class ReportFactory {
     public static Report createReport(ReportType type) {
         switch (type) {
-            case APPOINTMENT:
-                return new AppointmentReport();
-            case REVENUE:
-                return new RevenueReport();
-            case CUSTOMER:
-                return new CustomerReport();
-            case EMPLOYEE:
-                return new EmployeeReport();
-            default:
-                throw new IllegalArgumentException("Unknown report type");
+            case APPOINTMENT: return new AppointmentReport();
+            case REVENUE:     return new RevenueReport();
+            case CUSTOMER:    return new CustomerReport();
+            case EMPLOYEE:    return new EmployeeReport();
+            default: throw new IllegalArgumentException("Unknown report type");
         }
     }
 }
 
-// Usage
-Report report = ReportFactory.createReport(ReportType.REVENUE);
-String output = report.generateReport();
+// Usage in console UI
+System.out.println("Select Report Type:");
+System.out.println("  [1] Appointment Report");
+System.out.println("  [2] Revenue Report");
+System.out.println("  [3] Customer Report");
+System.out.println("  [4] Employee Report");
+int choice = UIHelper.readInt("Enter choice: ");
+Report report = ReportFactory.createReport(ReportType.values()[choice - 1]);
+report.printReport();
 ```
 
 #### 3. Template Method Pattern (BaseDAO)
+
 ```java
 public abstract class BaseDAO<T> {
-    // Template method - defines algorithm skeleton
     public boolean save(T entity) {
         try {
             beginTransaction();
@@ -2648,8 +2807,7 @@ public abstract class BaseDAO<T> {
             throw e;
         }
     }
-    
-    // Abstract step - subclasses implement
+
     protected abstract boolean performSave(T entity);
 }
 ```
@@ -2657,63 +2815,52 @@ public abstract class BaseDAO<T> {
 ### Common Pitfalls to Avoid
 
 **1. SQL Injection**
+
 ```java
 // BAD - Vulnerable to SQL injection
 String sql = "SELECT * FROM users WHERE username = '" + username + "'";
-Statement stmt = connection.createStatement();
-ResultSet rs = stmt.executeQuery(sql);
 
 // GOOD - Use PreparedStatement
 String sql = "SELECT * FROM users WHERE username = ?";
 PreparedStatement stmt = connection.prepareStatement(sql);
 stmt.setString(1, username);
-ResultSet rs = stmt.executeQuery();
 ```
 
 **2. Not Closing Resources**
+
 ```java
 // BAD - Resource leak
 ResultSet rs = stmt.executeQuery(sql);
-// ... use rs
 // Never closed
 
 // GOOD - Always close in finally
 ResultSet rs = null;
 try {
     rs = stmt.executeQuery(sql);
-    // ... use rs
 } finally {
     if (rs != null) rs.close();
 }
 ```
 
 **3. Catching Generic Exception**
-```java
-// BAD - Hiding specific errors
-try {
-    // ...
-} catch (Exception e) {
-    // What kind of error?
-}
 
-// GOOD - Catch specific exceptions
-try {
-    // ...
-} catch (SQLException e) {
-    // Database error
-} catch (ValidationException e) {
-    // Validation error
-}
+```java
+// BAD
+try { ... } catch (Exception e) { }
+
+// GOOD
+try { ... }
+catch (SQLException e) { /* Database error */ }
+catch (ValidationException e) { /* Validation error */ }
 ```
 
 **4. No Input Validation**
-```java
-// BAD - Trusting user input
-public void setPetAge(int age) {
-    this.age = age;  // What if age is -5 or 1000?
-}
 
-// GOOD - Validate first
+```java
+// BAD
+public void setPetAge(int age) { this.age = age; }
+
+// GOOD
 public void setPetAge(int age) {
     if (age < 0 || age > 30) {
         throw new ValidationException("Invalid age: " + age);
@@ -2722,9 +2869,22 @@ public void setPetAge(int age) {
 }
 ```
 
+**5. Scanner Mismatch (Console-Specific Pitfall)**
+
+```java
+// BAD - mixing nextInt() and nextLine() causes skipped inputs
+int choice = scanner.nextInt();
+String name = scanner.nextLine(); // This reads the leftover newline!
+
+// GOOD - always use nextLine() and parse manually
+int choice = Integer.parseInt(scanner.nextLine().trim());
+String name = scanner.nextLine().trim();
+```
+
 ### Testing Code Snippets
 
 #### Unit Test Example
+
 ```java
 public class PetOwnerTest {
     @Test
@@ -2732,12 +2892,9 @@ public class PetOwnerTest {
         PetOwner owner = new PetOwner();
         owner.setFirstName("Juan");
         owner.setLastName("Cruz");
-        
-        String fullName = owner.getFullName();
-        
-        assertEquals("Juan Cruz", fullName);
+        assertEquals("Juan Cruz", owner.getFullName());
     }
-    
+
     @Test(expected = ValidationException.class)
     public void testInvalidEmail() {
         PetOwner owner = new PetOwner();
@@ -2747,28 +2904,29 @@ public class PetOwnerTest {
 ```
 
 #### Integration Test Example
+
 ```java
 public void testCompleteBookingFlow() {
     // 1. Login
     User user = authService.login("maria_santos", "password123");
     assertNotNull(user);
-    
+
     // 2. Get owner
     PetOwner owner = petOwnerDAO.findByUserId(user.getUserId());
     assertNotNull(owner);
-    
+
     // 3. Get pet
     List<Pet> pets = petDAO.findByOwnerId(owner.getOwnerId());
     assertTrue(pets.size() > 0);
-    
+
     // 4. Create appointment
     Appointment apt = new Appointment();
     apt.setPetId(pets.get(0).getPetId());
     apt.setOwnerId(owner.getOwnerId());
-    apt.setServiceId(1);  // Grooming
+    apt.setServiceId(1);
     apt.setAppointmentDate(LocalDate.now().plusDays(1));
     apt.setAppointmentTime(LocalTime.of(10, 0));
-    
+
     // 5. Book
     boolean success = appointmentDAO.insert(apt);
     assertTrue(success);
@@ -2783,21 +2941,25 @@ public void testCompleteBookingFlow() {
 ### Basic Queries
 
 **Select All:**
+
 ```sql
 SELECT * FROM pets;
 ```
 
 **Select Specific Columns:**
+
 ```sql
 SELECT pet_name, species, age FROM pets;
 ```
 
 **With WHERE Clause:**
+
 ```sql
 SELECT * FROM appointments WHERE status = 'PENDING';
 ```
 
 **With JOIN:**
+
 ```sql
 SELECT p.pet_name, po.first_name, po.last_name
 FROM pets p
@@ -2805,17 +2967,20 @@ JOIN pet_owners po ON p.owner_id = po.owner_id;
 ```
 
 **Count:**
+
 ```sql
 SELECT COUNT(*) AS total FROM appointments;
 ```
 
 **Sum:**
+
 ```sql
 SELECT SUM(total_price) AS revenue FROM appointments
 WHERE status = 'COMPLETED';
 ```
 
 **Group By:**
+
 ```sql
 SELECT status, COUNT(*) AS count
 FROM appointments
@@ -2825,8 +2990,9 @@ GROUP BY status;
 ### Useful Queries for Testing
 
 **View all appointments with owner and pet names:**
+
 ```sql
-SELECT 
+SELECT
     a.appointment_id,
     CONCAT(po.first_name, ' ', po.last_name) AS owner,
     p.pet_name AS pet,
@@ -2843,18 +3009,20 @@ ORDER BY a.appointment_date DESC;
 ```
 
 **Find available time slots:**
+
 ```sql
 SELECT appointment_time, COUNT(*) as bookings
 FROM appointments
 WHERE appointment_date = '2024-06-15'
 AND status != 'CANCELLED'
 GROUP BY appointment_time
-HAVING bookings < 3;  -- Assuming 3 employees available
+HAVING bookings < 3;
 ```
 
 **Monthly revenue:**
+
 ```sql
-SELECT 
+SELECT
     MONTH(appointment_date) AS month,
     COUNT(*) AS appointments,
     SUM(total_price) AS revenue
@@ -2893,32 +3061,38 @@ ORDER BY month;
 ### Files to Submit
 
 #### Source Code
+
 - [ ] All .java files in correct package structure
 - [ ] config.properties file (with placeholder values)
 - [ ] README.md with setup instructions
 
 #### Database
+
 - [ ] schema.sql (CREATE TABLE statements)
 - [ ] sample_data.sql (INSERT statements for testing)
 
 #### Documentation
-- [ ] User Manual (PDF) - How to use the system
+
+- [ ] User Manual (PDF) - How to use the console system
 - [ ] Technical Documentation (PDF) - System design and code explanation
 - [ ] Project Report (PDF) - Overview, methodology, conclusion
 
 #### Diagrams
+
 - [ ] ERD (Entity Relationship Diagram) - PNG or PDF
 - [ ] UML Class Diagram - PNG or PDF
 - [ ] Flowchart - PNG or PDF
 - [ ] System Architecture Diagram
 
 #### Presentation
+
 - [ ] PowerPoint slides (15-20 slides)
 - [ ] Demo script
 - [ ] Handout materials for panel
 
 #### Optional
-- [ ] Demo video (5-10 minutes)
+
+- [ ] Demo video (5-10 minutes, screen recording of console)
 - [ ] Test cases document
 - [ ] Bug tracking report
 - [ ] Meeting minutes
@@ -2956,10 +3130,11 @@ This comprehensive documentation provides everything needed to successfully comp
 7. **Have fun!** This is a learning experience
 
 ### Success Criteria
+
 - ✅ All 10 required features working
 - ✅ All OOP concepts demonstrated
 - ✅ Clean, well-documented code
-- ✅ Professional presentation
+- ✅ Professional console interface
 - ✅ Team members can explain any part
 
 ### Target Grade: 95%+
@@ -2968,7 +3143,86 @@ Good luck with your project! 🐾
 
 ---
 
-**Document Version**: 1.0  
-**Last Updated**: June 2024  
+**Document Version**: 2.0 (Console-Based Edition)
+**Last Updated**: June 2024
 **Created by**: Smart Pet Booking System Development Team
 **For**: Object-Oriented Programming with Database Integration - Final Project
+
+# Console-Based Java Project Refactor
+
+I am converting my Java project from a GUI-based system into a console-based system.
+
+Your tasks:
+
+## 1. Refactor the Project Structure
+
+Modify the folders and file organization to better fit a console-based architecture.
+
+Requirements:
+
+- Remove unnecessary GUI-related folders/classes (`JFrame`, Swing panels, GUI utilities, etc.)
+- Organize the project into clean modular folders
+- Keep the structure scalable and beginner-friendly
+
+Suggested structure:
+
+```text
+src/
+├── main/
+│   └── Main.java
+├── models/
+├── services/
+├── utils/
+├── handlers/
+├── data/
+└── menus/
+```
+
+## 2. Convert GUI Logic
+
+- Replace GUI interactions with console interactions
+- Use:
+  - `Scanner` for user input
+  - `JOptionPane` only for optional simple alerts/messages
+
+- Convert buttons, forms, and GUI navigation into text-based menus
+- Preserve all existing functionalities
+
+## 3. Create Documentation Files
+
+### README.md
+
+Create a structured `README.md` containing:
+
+- Project overview
+- Features
+- Folder structure
+- Technologies used
+- How to run the project
+- Console navigation flow
+- Important notes
+
+### CLAUDE.md
+
+Create a detailed `CLAUDE.md` file specifically for AI context.
+
+Include:
+
+- Full project architecture
+- Purpose of each folder/class
+- Coding conventions
+- Important business logic
+- Input/output flow
+- Refactor notes
+- Known limitations
+- Future improvement suggestions
+
+The `CLAUDE.md` should help an AI quickly understand the entire project and continue development efficiently.
+
+## Additional Requirements
+
+- Keep the code modular and maintainable
+- Follow clean code principles
+- Avoid overengineering
+- Make the console UI simple and readable
+- Add comments only when necessary
