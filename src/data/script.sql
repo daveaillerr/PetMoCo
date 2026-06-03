@@ -11,54 +11,79 @@ CREATE TABLE IF NOT EXISTS users (
     user_id   INT AUTO_INCREMENT PRIMARY KEY,
     username  VARCHAR(50) UNIQUE NOT NULL,
     password  VARCHAR(64)  NOT NULL,          -- SHA-256 hex hash
-    role      ENUM('USER','ADMIN') DEFAULT 'USER', -- Ensures customer & admin roles only
-    created_at TIMESTAMP   DEFAULT CURRENT_TIMESTAMP
+    role      ENUM('USER','ADMIN') DEFAULT 'USER', 
 );
 
 -- Pet Owners table
-CREATE TABLE pet_owner (
-    petOwnerID INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT UNIQUE, -- Connects to user_id for separate function
-    name VARCHAR(100),
-    email_address VARCHAR(100),
-    contact_number VARCHAR(20),
-    home_address VARCHAR(255),
+CREATE TABLE IF NOT EXISTS pet_owner (
+    pet_owner_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT UNIQUE, 
+    pet_owner_name VARCHAR(100),
+    pet_owner_email VARCHAR(100),
+    pet_owner_phone VARCHAR(11),
+    pet_owner_address VARCHAR(255),
 
-    FOREIGN KEY (user_id)
-    REFERENCES users(user_id)
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
--- Pets table
-CREATE TABLE IF NOT EXISTS pets (
+-- Pet type table
+CREATE TABLE IF NOT EXISTS pet_type( 
+    pet_type_id INT AUTO_INCREMENT PRIMARY KEY,
+    pet_type VARCHAR(50) NOT NULL,
+    pet_breed VARCHAR(50) NOT NULL,
+    pet_size VARCHAR(50) NOT NULL,
+)
+
+-- Pet table
+CREATE TABLE IF NOT EXISTS pet (
     pet_id        INT AUTO_INCREMENT PRIMARY KEY,
-    pet_name      VARCHAR(100) NOT NULL,
-    pet_type      VARCHAR(50)  NOT NULL,       -- e.g. Dog, Cat, Bird
-    breed         VARCHAR(100),
-    age           INT,
-    owner_name    VARCHAR(100) NOT NULL,
-    owner_contact VARCHAR(50)  NOT NULL,
-    created_at    TIMESTAMP    DEFAULT CURRENT_TIMESTAMP
+    pet_owner_id  INT            NOT NULL,
+    pet_type_id   INT            NOT NULL,
+    pet_name      VARCHAR(100)   NOT NULL,
+    pet_notes     VARCHAR(200),
+    FOREIGN KEY (pet_owner_id) REFERENCES pet_owner(petOwnerID) ON DELETE CASCADE
+    FOREIGN KEY (pet_type_id) REFERENCES pet_type(petTypeID) ON DELETE CASCADE
 );
 
--- Appointments table
-CREATE TABLE IF NOT EXISTS appointments (
+-- Appointment table
+CREATE TABLE IF NOT EXISTS appointment (
     appointment_id   INT AUTO_INCREMENT PRIMARY KEY,
     pet_id           INT         NOT NULL,
+    pet_owner_id     INT         NOT NULL,
     appointment_date DATE        NOT NULL,
     appointment_time TIME        NOT NULL,
-    service_type     VARCHAR(20) NOT NULL,     -- GROOMING | SITTING | WALKING
-    status           VARCHAR(20) DEFAULT 'SCHEDULED', -- SCHEDULED | CANCELLED
-    notes            TEXT,
-    created_at       TIMESTAMP   DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (pet_id) REFERENCES pets(pet_id) ON DELETE CASCADE
+    appointment_status           VARCHAR(20) DEFAULT 'PENDING', -- PENDING | APPROVED | CANCELLED | DONE
+    total_amount    FLOAT        NOT NULL,
+    FOREIGN KEY (pet_id) REFERENCES pet(pet_id) ON DELETE CASCADE
+    FOREIGN KEY (pet_owner_id) REFERENCES pet_owner(petOwnerID) ON DELETE CASCADE
 );
 
--- Optional: seed a default admin account (password = 'admin123')
--- SHA-256 of 'admin123' = 240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a
-INSERT IGNORE INTO users (username, password, role)
-VALUES ('admin', '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a', 'ADMIN');
+-- Appointment service table
+CREATE TABLE IF NOT EXISTS appointment_service(
+    appointment_service_id INT AUTO_INCREMENT PRIMARY KEY,
+    appointment_id INT NOT NULL,
+    service_id INT NOT NULL,
+    pricing_id INT NOT NULL,
+    is_confirmed VARCHAR(10) DEFAULT 'NO',
+    FOREIGN KEY (appointment_id) REFERENCES appointment(appointment_id) ON DELETE CASCADE,
+    FOREIGN KEY (service_id) REFERENCES services(service_id) ON DELETE CASCADE
+);
 
-SHOW TABLES;
-DESCRIBE users;
-DESCRIBE pets;
-DESCRIBE appointments;
+-- Services table
+CREATE TABLE IF NOT EXISTS services(
+    service_id INT AUTO_INCREMENT PRIMARY KEY,
+    services_name VARCHAR(100) NOT NULL,
+    service_description VARCHAR(200),
+    service_duration INT NOT NULL,
+);
+
+-- Pricing table
+CREATE TABLE IF NOT EXISTS pricing(
+    pricing_id INT AUTO_INCREMENT PRIMARY KEY,
+    service_id INT NOT NULL,
+    price FLOAT NOT NULL,
+    price_type VARCHAR(10) NOT NULL, -- FIXED | VARIABLE
+    price_size VARCHAR(10) NOT NULL, -- SMALL | MEDIUM | LARGE | EXTRA LARGE
+    FOREIGN KEY (service_id) REFERENCES services(service_id) ON DELETE CASCADE
+);
+
