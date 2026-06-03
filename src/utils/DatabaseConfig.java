@@ -26,8 +26,6 @@ public class DatabaseConfig {
     // Return an active connection, creating one if needed
     public static Connection getConnection() {
         try {
-            // Load MySQL driver
-            Class.forName("com.mysql.cj.jdbc.Driver");
 
             // Create connection if needed
             if (connection == null || connection.isClosed()) {
@@ -36,9 +34,6 @@ public class DatabaseConfig {
 
             return connection;
 
-        } catch (ClassNotFoundException e) {
-            System.err.println("[DB] MySQL driver not found: " + e.getMessage());
-            return null;
         } catch (SQLException e) {
             System.err.println("[DB] Connection failed: " + e.getMessage());
             return null;
@@ -60,7 +55,8 @@ public class DatabaseConfig {
     // Returns true if the database is reachable
     public static boolean testConnection() {
         try {
-            return connection != null && !connection.isClosed();
+            Connection connect = getConnection();
+            return connect != null && !connect.isClosed();
         } catch (SQLException e) {
             return false;
         }

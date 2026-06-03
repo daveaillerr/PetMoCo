@@ -5,7 +5,7 @@
 
 CREATE DATABASE IF NOT EXISTS petmoco_db;
 USE petmoco_db;
-
+	
 -- Users table (for login/authentication)
 CREATE TABLE IF NOT EXISTS users (
     user_id   INT AUTO_INCREMENT PRIMARY KEY,

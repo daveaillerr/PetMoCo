@@ -1,8 +1,6 @@
 
 import utils.DatabaseConfig;
 
-import java.util.Scanner;
-
 /**
  * Main — Application entry point for PetMoCo.
  *
@@ -16,7 +14,6 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
 
         // Close the DB connection cleanly on any exit
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -34,7 +31,6 @@ public class Main {
             System.err.println("  - MySQL server is running");
             System.err.println("  - .env file contains correct DB_URL, DB_USER, DB_PASSWORD");
             System.err.println("  - Database 'petmoco_db' exists (run src/data/script.sql)");
-            scanner.close();
             System.exit(1);
         }
 
@@ -44,6 +40,5 @@ public class Main {
 
         // ── Step 5: Graceful exit ───────────────────────────
         System.out.println("\nThank you for using PetMoCo. See you next time!");
-        scanner.close();
     }
 }
