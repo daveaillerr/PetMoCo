@@ -188,7 +188,7 @@ ConsoleHelper.pause(scanner)            ← waits for Enter
 
 ```powershell
 # Compile (PowerShell, from project root)
-javac -cp "lib/*" -d out (Get-ChildItem src -Recurse -Filter "*.java" | Select-Object -ExpandProperty FullName)
+javac -encoding UTF-8 -cp "lib/*" -d out (Get-ChildItem src -Recurse -Filter "*.java" | Select-Object -ExpandProperty FullName)
 
 # Run
 java -cp "out;lib/*" main.Main

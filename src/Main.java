@@ -1,5 +1,11 @@
 
+import menus.AuthMenu;
+import menus.MainMenu;
+import models.User;
+import utils.ConsoleHelper;
 import utils.DatabaseConfig;
+
+import java.util.Scanner;
 
 /**
  * Main — Application entry point for PetMoCo.
@@ -21,24 +27,40 @@ public class Main {
             System.out.println("Application shutdown complete.");
         }));
 
+        Scanner scanner = new Scanner(System.in);
+
         // ── Step 1: Welcome banner ──────────────────────────
+        ConsoleHelper.printBanner();
 
         // ── Step 2: Database connection ─────────────────────
         System.out.println("Connecting to database...");
         if (!DatabaseConfig.testConnection()) {
-            System.err.println("\n[ERROR] Could not connect to the database.");
+            ConsoleHelper.printError("Could not connect to the database.");
             System.err.println("Please check:");
             System.err.println("  - MySQL server is running");
             System.err.println("  - .env file contains correct DB_URL, DB_USER, DB_PASSWORD");
             System.err.println("  - Database 'petmoco_db' exists (run src/data/script.sql)");
             System.exit(1);
         }
+        ConsoleHelper.printSuccess("Database connected.");
 
         // ── Step 3: Authentication ──────────────────────────
+        AuthMenu authMenu = new AuthMenu(scanner);
+        User currentUser = authMenu.show();
+
+        if (currentUser == null) {
+            // User chose "Exit" from the auth menu
+            ConsoleHelper.printInfo("Goodbye!");
+            scanner.close();
+            return;
+        }
 
         // ── Step 4: Main menu ───────────────────────────────
+        MainMenu mainMenu = new MainMenu(scanner, currentUser);
+        mainMenu.show();
 
         // ── Step 5: Graceful exit ───────────────────────────
+        scanner.close();
         System.out.println("\nThank you for using PetMoCo. See you next time!");
     }
 }
