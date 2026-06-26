@@ -129,4 +129,27 @@ public class UserDAO {
             }
         }
     }
-}
+
+    /**
+     * Looks up the pet_owner_id for a given user_id.
+     * Needed because the pet table FK references pet_owner.pet_owner_id,
+     * not users.user_id directly.
+     *
+     * @return the pet_owner_id, or -1 if not found
+     */
+    public int findPetOwnerIdByUserId(int userId) {
+        String query = "SELECT pet_owner_id FROM pet_owner WHERE user_id = ?";
+        try {
+            Connection connect = DatabaseConfig.getConnection();
+            PreparedStatement stmt = connect.prepareStatement(query);
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("pet_owner_id");
+            }
+        } catch (SQLException e) {
+            System.out.println("[DB] Find pet owner ID failed: " + e.getMessage());
+        }
+        return -1;
+    }
+}
