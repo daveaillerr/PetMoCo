@@ -243,6 +243,15 @@ public class AppointmentMenu {
         ConsoleHelper.printHeader("Appointments by Pet");
 
         int petId = InputValidator.readPositiveInt(scanner, "Enter Pet ID");
+
+        // Verify the pet exists and belongs to the owner if not admin
+        Pet pet = petService.getPetById(petId);
+        if (pet == null || (petOwnerId != -1 && pet.getOwnerId() != petOwnerId)) {
+            ConsoleHelper.printError("Pet not found or does not belong to you.");
+            ConsoleHelper.pause(scanner);
+            return;
+        }
+
         List<Appointment> appointments = appointmentService.getAppointmentsByPet(petId);
 
         if (appointments.isEmpty()) {
@@ -261,7 +270,7 @@ public class AppointmentMenu {
         int apptId = InputValidator.readPositiveInt(scanner, "Enter Appointment ID");
         Appointment appt = appointmentService.getAppointmentById(apptId);
 
-        if (appt == null) {
+        if (appt == null || (petOwnerId != -1 && appt.getPetOwnerId() != petOwnerId)) {
             ConsoleHelper.printError("No appointment found with ID " + apptId + ".");
         } else {
             printAppointmentDetails(appt);
@@ -277,7 +286,7 @@ public class AppointmentMenu {
         int apptId = InputValidator.readPositiveInt(scanner, "Enter Appointment ID to cancel");
         Appointment appt = appointmentService.getAppointmentById(apptId);
 
-        if (appt == null) {
+        if (appt == null || (petOwnerId != -1 && appt.getPetOwnerId() != petOwnerId)) {
             ConsoleHelper.printError("No appointment found with ID " + apptId + ".");
             ConsoleHelper.pause(scanner);
             return;

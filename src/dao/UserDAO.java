@@ -17,10 +17,10 @@ public class UserDAO {
 
     public User login(String username, String password) {
         String query = "SELECT u.user_id, u.username, u.password, u.role, " +
-                       "       po.name, po.email_address, po.contact_number, po.home_address " +
-                       "FROM users u " +
-                       "LEFT JOIN pet_owner po ON u.user_id = po.user_id " +
-                       "WHERE u.username = ? AND u.password = ?";
+                "       po.name, po.email_address, po.contact_number, po.home_address " +
+                "FROM users u " +
+                "LEFT JOIN pet_owner po ON u.user_id = po.user_id " +
+                "WHERE u.username = ? AND u.password = ?";
 
         try {
             Connection connect = DatabaseConfig.getConnection();
@@ -36,22 +36,18 @@ public class UserDAO {
                 Role role = Role.valueOf(roleStr.toUpperCase());
 
                 if (role == Role.ADMIN) {
-                    System.out.println("Admin found");
                     return new Admin(id, username, password);
                 } else if (role == Role.USER) {
-                    System.out.println("User/PetOwner found");
                     return new PetOwner(
-                        id,
-                        username,
-                        password,
-                        result.getString("name"),
-                        result.getString("email_address"),
-                        result.getString("contact_number"),
-                        result.getString("home_address")
-                    );
+                            id,
+                            username,
+                            password,
+                            result.getString("name"),
+                            result.getString("email_address"),
+                            result.getString("contact_number"),
+                            result.getString("home_address"));
                 }
             } else {
-                System.out.println("User not found");
             }
 
         } catch (Exception e) {
@@ -75,28 +71,30 @@ public class UserDAO {
         }
     }
 
-    public boolean registerPetOwner(String username, String password, String name, String email, String contact, String address) {
+    public boolean registerPetOwner(String username, String password, String name, String email, String contact,
+            String address) {
         String insertUserQuery = "INSERT INTO users (username, password, role) VALUES (?, ?, 'USER')";
         String insertOwnerQuery = "INSERT INTO pet_owner (user_id, name, email_address, contact_number, home_address) VALUES (?, ?, ?, ?, ?)";
-        
+
         Connection connect = null;
         try {
             connect = DatabaseConfig.getConnection();
             connect.setAutoCommit(false); // Start transaction
-            
+
             // 1. Insert into users
-            PreparedStatement userStmt = connect.prepareStatement(insertUserQuery, java.sql.Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement userStmt = connect.prepareStatement(insertUserQuery,
+                    java.sql.Statement.RETURN_GENERATED_KEYS);
             userStmt.setString(1, username);
             userStmt.setString(2, password);
             userStmt.executeUpdate();
-            
+
             // Get user_id
             ResultSet generatedKeys = userStmt.getGeneratedKeys();
             if (!generatedKeys.next()) {
                 throw new SQLException("Failed to retrieve generated user ID.");
             }
             int userId = generatedKeys.getInt(1);
-            
+
             // 2. Insert into pet_owner
             PreparedStatement ownerStmt = connect.prepareStatement(insertOwnerQuery);
             ownerStmt.setInt(1, userId);
@@ -105,10 +103,10 @@ public class UserDAO {
             ownerStmt.setString(4, contact);
             ownerStmt.setString(5, address);
             ownerStmt.executeUpdate();
-            
+
             connect.commit(); // Commit transaction
             return true;
-            
+
         } catch (Exception e) {
             if (connect != null) {
                 try {
@@ -152,4 +150,4 @@ public class UserDAO {
         }
         return -1;
     }
-}
+}

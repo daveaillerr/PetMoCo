@@ -6,6 +6,18 @@
 CREATE DATABASE IF NOT EXISTS petmoco_db;
 USE petmoco_db;
 
+-- Drop existing tables to avoid schema mismatches with older versions
+DROP TABLE IF EXISTS appointment_service;
+DROP TABLE IF EXISTS appointment;
+DROP TABLE IF EXISTS appointments;
+DROP TABLE IF EXISTS pricing;
+DROP TABLE IF EXISTS services;
+DROP TABLE IF EXISTS pet;
+DROP TABLE IF EXISTS pets;
+DROP TABLE IF EXISTS pet_type;
+DROP TABLE IF EXISTS pet_owner;
+DROP TABLE IF EXISTS users;
+
 -- Users table (for login/authentication)
 CREATE TABLE IF NOT EXISTS users (
     user_id   INT AUTO_INCREMENT PRIMARY KEY,

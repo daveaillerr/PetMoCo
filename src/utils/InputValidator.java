@@ -220,6 +220,9 @@ public class InputValidator {
             if (console != null) {
                 // Real terminal: characters are hidden as you type
                 char[] chars = console.readPassword("%s: ", prompt);
+                if (chars == null) {
+                    throw new java.util.NoSuchElementException("Console input closed.");
+                }
                 password = new String(chars);
             } else {
                 // IDE / redirected input: plain text fallback

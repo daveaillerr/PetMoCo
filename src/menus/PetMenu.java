@@ -131,7 +131,7 @@ public class PetMenu {
         int petId = InputValidator.readPositiveInt(scanner, "Enter Pet ID");
         Pet pet = petService.getPetById(petId);
 
-        if (pet == null) {
+        if (pet == null || (petOwnerId != -1 && pet.getOwnerId() != petOwnerId)) {
             ConsoleHelper.printError("No pet found with ID " + petId + ".");
         } else {
             printPetDetails(pet);
@@ -147,7 +147,7 @@ public class PetMenu {
         int petId = InputValidator.readPositiveInt(scanner, "Enter Pet ID to update");
         Pet pet = petService.getPetById(petId);
 
-        if (pet == null) {
+        if (pet == null || (petOwnerId != -1 && pet.getOwnerId() != petOwnerId)) {
             ConsoleHelper.printError("No pet found with ID " + petId + ".");
             ConsoleHelper.pause(scanner);
             return;
@@ -189,7 +189,7 @@ public class PetMenu {
         int petId = InputValidator.readPositiveInt(scanner, "Enter Pet ID to remove");
         Pet pet = petService.getPetById(petId);
 
-        if (pet == null) {
+        if (pet == null || (petOwnerId != -1 && pet.getOwnerId() != petOwnerId)) {
             ConsoleHelper.printError("No pet found with ID " + petId + ".");
             ConsoleHelper.pause(scanner);
             return;
