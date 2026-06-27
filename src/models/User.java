@@ -1,3 +1,4 @@
+
 package models;
 
 public abstract class User {
@@ -33,4 +34,11 @@ public abstract class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    /**
+     * Abstract method — forces each subclass to define its own display format.
+     * Demonstrates abstraction: subclasses MUST implement this method.
+     */
+    public abstract String getDisplayInfo();
 }
+

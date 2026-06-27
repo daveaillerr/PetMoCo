@@ -198,6 +198,91 @@ public class AppointmentDAO {
         return null;
     }
 
+        /**
+     * Searches appointments by date.
+     * If petOwnerId is -1, searches all (admin). Otherwise filters by owner.
+     */
+    public List<Appointment> searchByDate(String date, int petOwnerId) {
+        String sql;
+        if (petOwnerId == -1) {
+            sql = "SELECT a.appointment_id, a.pet_id, a.pet_owner_id, "
+                + "a.appointment_date, a.appointment_time, a.appointment_status, "
+                + "a.total_amount, p.pet_name "
+                + "FROM appointment a "
+                + "JOIN pet p ON a.pet_id = p.pet_id "
+                + "WHERE a.appointment_date = ? "
+                + "ORDER BY a.appointment_time";
+        } else {
+            sql = "SELECT a.appointment_id, a.pet_id, a.pet_owner_id, "
+                + "a.appointment_date, a.appointment_time, a.appointment_status, "
+                + "a.total_amount, p.pet_name "
+                + "FROM appointment a "
+                + "JOIN pet p ON a.pet_id = p.pet_id "
+                + "WHERE a.appointment_date = ? AND a.pet_owner_id = ? "
+                + "ORDER BY a.appointment_time";
+        }
+
+        List<Appointment> list = new ArrayList<>();
+        try {
+            Connection conn = DatabaseConfig.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, date);
+            if (petOwnerId != -1) {
+                stmt.setInt(2, petOwnerId);
+            }
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                list.add(mapRow(rs));
+            }
+        } catch (SQLException e) {
+            System.out.println("[DB] Search appointments by date failed: " + e.getMessage());
+        }
+        return list;
+    }
+
+    /**
+     * Searches appointments by status keyword (e.g., PENDING, APPROVED, CANCELLED, DONE).
+     * If petOwnerId is -1, searches all (admin). Otherwise filters by owner.
+     */
+    public List<Appointment> searchByStatus(String status, int petOwnerId) {
+        String sql;
+        if (petOwnerId == -1) {
+            sql = "SELECT a.appointment_id, a.pet_id, a.pet_owner_id, "
+                + "a.appointment_date, a.appointment_time, a.appointment_status, "
+                + "a.total_amount, p.pet_name "
+                + "FROM appointment a "
+                + "JOIN pet p ON a.pet_id = p.pet_id "
+                + "WHERE a.appointment_status = ? "
+                + "ORDER BY a.appointment_date DESC";
+        } else {
+            sql = "SELECT a.appointment_id, a.pet_id, a.pet_owner_id, "
+                + "a.appointment_date, a.appointment_time, a.appointment_status, "
+                + "a.total_amount, p.pet_name "
+                + "FROM appointment a "
+                + "JOIN pet p ON a.pet_id = p.pet_id "
+                + "WHERE a.appointment_status = ? AND a.pet_owner_id = ? "
+                + "ORDER BY a.appointment_date DESC";
+        }
+
+        List<Appointment> list = new ArrayList<>();
+        try {
+            Connection conn = DatabaseConfig.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, status.toUpperCase());
+            if (petOwnerId != -1) {
+                stmt.setInt(2, petOwnerId);
+            }
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                list.add(mapRow(rs));
+            }
+        } catch (SQLException e) {
+            System.out.println("[DB] Search appointments by status failed: " + e.getMessage());
+        }
+        return list;
+    }
+
+
     /**
      * Sets an appointment's status to CANCELLED.
      *

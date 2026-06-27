@@ -187,6 +187,38 @@ public class PetDAO {
         return null;
     }
 
+        /**
+     * Searches pets by name keyword (case-insensitive LIKE match).
+     * If ownerId is -1, searches all pets (admin). Otherwise filters by owner.
+     */
+    public List<Pet> searchByName(String keyword, int ownerId) {
+        String sql;
+        if (ownerId == -1) {
+            sql = "SELECT pet_id, pet_owner_id, pet_type_id, pet_name, pet_notes "
+                + "FROM pet WHERE pet_name LIKE ?";
+        } else {
+            sql = "SELECT pet_id, pet_owner_id, pet_type_id, pet_name, pet_notes "
+                + "FROM pet WHERE pet_name LIKE ? AND pet_owner_id = ?";
+        }
+
+        List<Pet> pets = new ArrayList<>();
+        try {
+            Connection conn = DatabaseConfig.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, "%" + keyword + "%");
+            if (ownerId != -1) {
+                stmt.setInt(2, ownerId);
+            }
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                pets.add(mapRow(rs));
+            }
+        } catch (SQLException e) {
+            System.out.println("[DB] Search pets failed: " + e.getMessage());
+        }
+        return pets;
+    }
+
     /**
      * Updates a pet's name and notes.
      *

@@ -52,31 +52,39 @@ public class PetMenu {
             System.out.println("  3. View Pet Details");
             System.out.println("  4. Update Pet Info");
             System.out.println("  5. Remove a Pet");
+            System.out.println("  6. Search Pet");
             System.out.println("  0. Back");
             ConsoleHelper.printThinDivider();
 
-            int choice = InputValidator.readInt(scanner, "Choose an option", 0, 5);
+            int choice = InputValidator.readInt(scanner, "Choose an option", 0, 6);
 
             switch (choice) {
-                case 1:
-                    handleRegister();
-                    break;
-                case 2:
-                    handleViewAll();
-                    break;
-                case 3:
-                    handleDetails();
-                    break;
-                case 4:
-                    handleUpdate();
-                    break;
-                case 5:
-                    handleRemove();
-                    break;
-                case 0:
-                    return;
+                case 1: handleRegister(); break;
+                case 2: handleViewAll();  break;
+                case 3: handleDetails();  break;
+                case 4: handleUpdate();   break;
+                case 5: handleRemove();   break;
+                case 6: handleSearch();   break;
+                case 0: return;
             }
         }
+    }
+
+// ── NEW: Search Pet method ───────────────────────────────────────────────
+    private void handleSearch() {
+        ConsoleHelper.printHeader("Search Pet");
+
+        String keyword = InputValidator.readNonEmptyString(scanner, "Enter pet name to search");
+
+        List<Pet> results = petService.searchPetsByName(keyword, petOwnerId);
+
+        if (results.isEmpty()) {
+            ConsoleHelper.printInfo("No pets found matching \"" + keyword + "\".");
+        } else {
+            ConsoleHelper.printSuccess(results.size() + " pet(s) found:");
+            printPetTable(results);
+        }
+        ConsoleHelper.pause(scanner);
     }
 
     // ── 1. Register Pet ──────────────────────────────────────────────────────
@@ -219,7 +227,7 @@ public class PetMenu {
      * Prints a table of pets with their type details.
      */
     private void printPetTable(List<Pet> pets) {
-        System.out.printf("  %-5s %-15s %-10s %-15s %-10s%n",
+        System.out.printf("  %-4s %-12s %-8s %-12s %-10s%n",
                 "ID", "Name", "Type", "Breed", "Size");
         ConsoleHelper.printThinDivider();
 
@@ -229,9 +237,21 @@ public class PetMenu {
             String breed = (typeInfo != null) ? typeInfo[1] : "?";
             String size = (typeInfo != null) ? typeInfo[2] : "?";
 
-            System.out.printf("  %-5d %-15s %-10s %-15s %-10s%n",
-                    pet.getId(), pet.getName(), type, breed, size);
+            System.out.printf("  %-4d %-12s %-8s %-12s %-10s%n",
+                    pet.getId(),
+                    truncate(pet.getName(), 12),
+                    truncate(type, 8),
+                    truncate(breed, 12),
+                    truncate(size, 10));
         }
+    }
+
+    /**
+     * Truncates text to fit column width.
+     */
+    private String truncate(String text, int maxLen) {
+        if (text == null) return "?";
+        return text.length() > maxLen ? text.substring(0, maxLen - 1) + "." : text;
     }
 
     /**

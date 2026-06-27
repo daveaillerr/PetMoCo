@@ -3,6 +3,7 @@ package services;
 import dao.PetDAO;
 import models.Pet;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -111,5 +112,18 @@ public class PetService {
      */
     public boolean deletePet(int petId) {
         return petDAO.delete(petId);
+    }
+
+        /**
+     * Searches pets by name keyword.
+     * @param keyword  the search term (partial match)
+     * @param ownerId  the pet_owner_id, or -1 for admin (all pets)
+     */
+    public List<Pet> searchPetsByName(String keyword, int ownerId) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            System.out.println("[Validation] Search keyword cannot be empty.");
+            return new ArrayList<>();
+        }
+        return petDAO.searchByName(keyword.trim(), ownerId);
     }
 }

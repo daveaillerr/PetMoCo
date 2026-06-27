@@ -14,15 +14,13 @@ public class DatabaseConfig {
     private static Connection connection = null;
 
     // Load environment variables from .env file
-    private static final Dotenv dotenv = Dotenv.configure()
-            .directory("./")
-            .ignoreIfMissing()
-            .load();
+    private static final Dotenv dotenv = Dotenv.load();
 
     private static final String URL = dotenv.get("DB_URL");
     private static final String USERNAME = dotenv.get("DB_USER");
     private static final String PASSWORD = dotenv.get("DB_PASSWORD");
 
+    
     // Return an active connection, creating one if needed
     public static Connection getConnection() {
         try {

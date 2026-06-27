@@ -1,3 +1,4 @@
+
 package models;
 
 public class PetOwner extends User {
@@ -28,8 +29,14 @@ public class PetOwner extends User {
     public void setHomeAddress(String homeAddress) { this.homeAddress = homeAddress; }
 
     @Override
+    public String getDisplayInfo() {
+        return "Pet Owner: " + fullName + " | Contact: " + contactNumber + " | Address: " + homeAddress;
+    }
+
+    @Override
     public String toString() {
         return "PetOwner [ID: " + userId + ", Username: " + username + ", Name: " + fullName + 
                ", Contact: " + contactNumber + ", Address: " + homeAddress + "]";
     }
 }
+

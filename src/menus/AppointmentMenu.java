@@ -1,3 +1,4 @@
+
 package menus;
 
 import dao.UserDAO;
@@ -11,15 +12,11 @@ import utils.ConsoleHelper;
 import utils.InputValidator;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
-/**
- * AppointmentMenu — Console UI for appointment management.
- *
- * Options: Book / View All / View by Pet / View Details / Cancel
- * Loops until the user picks 0 (Back).
- */
 public class AppointmentMenu {
 
     private final Scanner scanner;
@@ -42,9 +39,6 @@ public class AppointmentMenu {
         }
     }
 
-    /**
-     * Shows the appointment management menu.
-     */
     public void show() {
         while (true) {
             ConsoleHelper.printHeader("Manage Appointments");
@@ -53,10 +47,14 @@ public class AppointmentMenu {
             System.out.println("  3. View by Pet");
             System.out.println("  4. View Appointment Details");
             System.out.println("  5. Cancel an Appointment");
+            System.out.println("  6. Search Appointment");
+            if (petOwnerId == -1) {
+                System.out.println("  7. Generate Report");
+            }
             System.out.println("  0. Back");
             ConsoleHelper.printThinDivider();
 
-            int choice = InputValidator.readInt(scanner, "Choose an option", 0, 5);
+            int choice = InputValidator.readInt(scanner, "Choose an option", 0, 7);
 
             switch (choice) {
                 case 1: handleBook();       break;
@@ -64,12 +62,12 @@ public class AppointmentMenu {
                 case 3: handleViewByPet();  break;
                 case 4: handleDetails();    break;
                 case 5: handleCancel();     break;
+                case 6: handleSearch();     break;
+                case 7: handleReport();     break;
                 case 0: return;
             }
         }
     }
-
-    // ── 1. Book Appointment ──────────────────────────────────────────────────
 
     private void handleBook() {
         ConsoleHelper.printHeader("Book an Appointment");
@@ -80,7 +78,6 @@ public class AppointmentMenu {
             return;
         }
 
-        // Step 1: Select a pet
         List<Pet> pets = petService.getPetsByOwner(petOwnerId);
         if (pets.isEmpty()) {
             ConsoleHelper.printError("You have no registered pets. Register a pet first.");
@@ -98,7 +95,6 @@ public class AppointmentMenu {
 
         int petId = InputValidator.readPositiveInt(scanner, "Enter Pet ID");
 
-        // Verify pet belongs to this owner
         Pet selectedPet = petService.getPetById(petId);
         if (selectedPet == null || selectedPet.getOwnerId() != petOwnerId) {
             ConsoleHelper.printError("Pet not found or doesn't belong to you.");
@@ -106,7 +102,6 @@ public class AppointmentMenu {
             return;
         }
 
-        // Get pet size for pricing display
         String petSize = appointmentService.getPetSize(petId);
         if (petSize == null) {
             ConsoleHelper.printError("Could not determine pet size for pricing.");
@@ -114,7 +109,6 @@ public class AppointmentMenu {
             return;
         }
 
-        // Step 2: Select services
         List<String[]> availableServices = appointmentService.getAvailableServices();
         if (availableServices.isEmpty()) {
             ConsoleHelper.printError("No services are available. Contact an admin.");
@@ -122,9 +116,9 @@ public class AppointmentMenu {
             return;
         }
 
-        System.out.println("\n  Available services (prices for " + petSize + " size):");
+        System.out.println("\n  Services (prices for " + petSize + " size):");
         ConsoleHelper.printThinDivider();
-        System.out.printf("  %-4s %-15s %-35s %8s %5s%n",
+        System.out.printf("  %-3s %-13s %-35s %8s %4s%n",
                 "#", "Service", "Description", "Price", "Min");
         ConsoleHelper.printThinDivider();
 
@@ -132,12 +126,11 @@ public class AppointmentMenu {
             int svcId = Integer.parseInt(svc[0]);
             float[] pricing = appointmentService.getPrice(svcId, petSize);
             String priceStr = (pricing != null) ? String.format("%.2f", pricing[1]) : "N/A";
-            System.out.printf("  %-4s %-15s %-35s %8s %5s%n",
+            System.out.printf("  %-3s %-13s %-35s %8s %4s%n",
                     svc[0], svc[1], svc[2], priceStr, svc[3]);
         }
         ConsoleHelper.printThinDivider();
 
-        // Collect service selections
         List<Integer> selectedServiceIds = new ArrayList<>();
         ConsoleHelper.printInfo("Enter service numbers one at a time. Type 0 when done.");
 
@@ -146,7 +139,6 @@ public class AppointmentMenu {
             if (svcChoice == 0) {
                 break;
             }
-            // Validate service exists
             boolean valid = false;
             for (String[] svc : availableServices) {
                 if (Integer.parseInt(svc[0]) == svcChoice) {
@@ -172,11 +164,9 @@ public class AppointmentMenu {
             return;
         }
 
-        // Step 3: Date and time
         String date = InputValidator.readDate(scanner, "Appointment date");
         String time = InputValidator.readTime(scanner, "Appointment time");
 
-        // Step 4: Show summary and confirm
         ConsoleHelper.printThinDivider();
         System.out.println("  Booking Summary:");
         System.out.println("  Pet       : " + selectedPet.getName());
@@ -208,7 +198,6 @@ public class AppointmentMenu {
             return;
         }
 
-        // Step 5: Book
         int appointmentId = appointmentService.bookAppointment(
                 petId, petOwnerId, date, time, selectedServiceIds);
 
@@ -219,8 +208,6 @@ public class AppointmentMenu {
         }
         ConsoleHelper.pause(scanner);
     }
-
-    // ── 2. View All ──────────────────────────────────────────────────────────
 
     private void handleViewAll() {
         ConsoleHelper.printHeader("All Appointments");
@@ -237,14 +224,11 @@ public class AppointmentMenu {
         ConsoleHelper.pause(scanner);
     }
 
-    // ── 3. View by Pet ───────────────────────────────────────────────────────
-
     private void handleViewByPet() {
         ConsoleHelper.printHeader("Appointments by Pet");
 
         int petId = InputValidator.readPositiveInt(scanner, "Enter Pet ID");
 
-        // Verify the pet exists and belongs to the owner if not admin
         Pet pet = petService.getPetById(petId);
         if (pet == null || (petOwnerId != -1 && pet.getOwnerId() != petOwnerId)) {
             ConsoleHelper.printError("Pet not found or does not belong to you.");
@@ -262,8 +246,6 @@ public class AppointmentMenu {
         ConsoleHelper.pause(scanner);
     }
 
-    // ── 4. View Details ──────────────────────────────────────────────────────
-
     private void handleDetails() {
         ConsoleHelper.printHeader("Appointment Details");
 
@@ -277,8 +259,6 @@ public class AppointmentMenu {
         }
         ConsoleHelper.pause(scanner);
     }
-
-    // ── 5. Cancel ────────────────────────────────────────────────────────────
 
     private void handleCancel() {
         ConsoleHelper.printHeader("Cancel an Appointment");
@@ -315,17 +295,156 @@ public class AppointmentMenu {
         ConsoleHelper.pause(scanner);
     }
 
-    // ── Display Helpers ──────────────────────────────────────────────────────
+    private void handleSearch() {
+        ConsoleHelper.printHeader("Search Appointments");
+
+        System.out.println("  Search by:");
+        System.out.println("    1. Date");
+        System.out.println("    2. Status");
+        ConsoleHelper.printThinDivider();
+
+        int searchChoice = InputValidator.readInt(scanner, "Choose search type", 1, 2);
+
+        List<Appointment> results;
+
+        if (searchChoice == 1) {
+            String date = InputValidator.readNonEmptyString(scanner, "Enter date (YYYY-MM-DD)");
+            results = appointmentService.searchAppointmentsByDate(date, petOwnerId);
+        } else {
+            System.out.println("  Status options: PENDING, APPROVED, CANCELLED, DONE");
+            String status = InputValidator.readNonEmptyString(scanner, "Enter status");
+            results = appointmentService.searchAppointmentsByStatus(status, petOwnerId);
+        }
+
+        if (results.isEmpty()) {
+            ConsoleHelper.printInfo("No appointments found matching your search.");
+        } else {
+            ConsoleHelper.printSuccess(results.size() + " appointment(s) found:");
+            printAppointmentTable(results);
+        }
+        ConsoleHelper.pause(scanner);
+    }
+
+    private void handleReport() {
+        if (petOwnerId != -1) {
+            ConsoleHelper.printError("Only admins can generate reports.");
+            ConsoleHelper.pause(scanner);
+            return;
+        }
+
+        ConsoleHelper.printHeader("Appointment Reports");
+
+        System.out.println("  Report Type:");
+        System.out.println("    1. Summary by Status");
+        System.out.println("    2. Revenue Summary");
+        System.out.println("    3. Appointments per Pet");
+        ConsoleHelper.printThinDivider();
+
+        int reportChoice = InputValidator.readInt(scanner, "Choose report type", 1, 3);
+
+        List<Appointment> appointments = appointmentService.getAllAppointments();
+
+        if (appointments.isEmpty()) {
+            ConsoleHelper.printInfo("No appointment data available for report.");
+            ConsoleHelper.pause(scanner);
+            return;
+        }
+
+        switch (reportChoice) {
+            case 1: reportByStatus(appointments);  break;
+            case 2: reportRevenue(appointments);   break;
+            case 3: reportByPet(appointments);     break;
+        }
+        ConsoleHelper.pause(scanner);
+    }
+
+    private void reportByStatus(List<Appointment> appointments) {
+        ConsoleHelper.printHeader("Report: Appointments by Status");
+
+        int pending = 0, approved = 0, cancelled = 0, done = 0;
+
+        for (Appointment a : appointments) {
+            switch (a.getStatus().toUpperCase()) {
+                case "PENDING":   pending++;   break;
+                case "APPROVED":  approved++;  break;
+                case "CANCELLED": cancelled++; break;
+                case "DONE":      done++;      break;
+            }
+        }
+
+        int total = appointments.size();
+        System.out.println("  Total Appointments : " + total);
+        ConsoleHelper.printThinDivider();
+        System.out.printf("  %-12s %5s %10s%n", "Status", "Count", "Percentage");
+        ConsoleHelper.printThinDivider();
+        System.out.printf("  %-12s %5d %9.1f%%%n", "PENDING", pending, (pending * 100.0 / total));
+        System.out.printf("  %-12s %5d %9.1f%%%n", "APPROVED", approved, (approved * 100.0 / total));
+        System.out.printf("  %-12s %5d %9.1f%%%n", "CANCELLED", cancelled, (cancelled * 100.0 / total));
+        System.out.printf("  %-12s %5d %9.1f%%%n", "DONE", done, (done * 100.0 / total));
+        ConsoleHelper.printThinDivider();
+    }
+
+    private void reportRevenue(List<Appointment> appointments) {
+        ConsoleHelper.printHeader("Report: Revenue Summary");
+
+        float totalRevenue = 0;
+        float pendingRevenue = 0;
+        float completedRevenue = 0;
+        float cancelledRevenue = 0;
+
+        for (Appointment a : appointments) {
+            switch (a.getStatus().toUpperCase()) {
+                case "PENDING":
+                case "APPROVED":
+                    pendingRevenue += a.getTotalAmount();
+                    break;
+                case "DONE":
+                    completedRevenue += a.getTotalAmount();
+                    break;
+                case "CANCELLED":
+                    cancelledRevenue += a.getTotalAmount();
+                    break;
+            }
+            totalRevenue += a.getTotalAmount();
+        }
+
+        System.out.printf("  %-22s : PHP %,.2f%n", "Total Booked Revenue", totalRevenue);
+        System.out.printf("  %-22s : PHP %,.2f%n", "Completed (Earned)", completedRevenue);
+        System.out.printf("  %-22s : PHP %,.2f%n", "Pending/Approved", pendingRevenue);
+        System.out.printf("  %-22s : PHP %,.2f%n", "Cancelled (Lost)", cancelledRevenue);
+        ConsoleHelper.printThinDivider();
+    }
+
+    private void reportByPet(List<Appointment> appointments) {
+        ConsoleHelper.printHeader("Report: Appointments per Pet");
+
+        Map<String, int[]> petStats = new LinkedHashMap<>();
+
+        for (Appointment a : appointments) {
+            String petName = a.getPetName() != null ? a.getPetName() : "Unknown";
+            petStats.computeIfAbsent(petName, k -> new int[]{0});
+            petStats.get(petName)[0]++;
+        }
+
+        System.out.printf("  %-18s %8s%n", "Pet Name", "Bookings");
+        ConsoleHelper.printThinDivider();
+
+        for (Map.Entry<String, int[]> entry : petStats.entrySet()) {
+            System.out.printf("  %-18s %8d%n", entry.getKey(), entry.getValue()[0]);
+        }
+        ConsoleHelper.printThinDivider();
+        System.out.println("  Total Pets: " + petStats.size());
+    }
 
     private void printAppointmentTable(List<Appointment> appointments) {
-        System.out.printf("  %-5s %-12s %-12s %-6s %-12s %10s%n",
+        System.out.printf("  %-4s %-10s %-11s %-6s %-10s %8s%n",
                 "ID", "Pet", "Date", "Time", "Status", "Total");
         ConsoleHelper.printThinDivider();
 
         for (Appointment a : appointments) {
-            System.out.printf("  %-5d %-12s %-12s %-6s %-12s %10.2f%n",
+            System.out.printf("  %-4d %-10s %-11s %-6s %-10s %8.2f%n",
                     a.getAppointmentId(),
-                    truncate(a.getPetName(), 12),
+                    truncate(a.getPetName(), 10),
                     a.getDate(),
                     a.getTime(),
                     a.getStatus(),
@@ -341,7 +460,6 @@ public class AppointmentMenu {
         System.out.println("  Status         : " + appt.getStatus());
         System.out.printf("  Total Amount   : %.2f%n", appt.getTotalAmount());
 
-        // Show linked services
         List<String[]> services = appointmentService.getAppointmentServices(appt.getAppointmentId());
         if (!services.isEmpty()) {
             System.out.println("  Services       :");
@@ -356,3 +474,4 @@ public class AppointmentMenu {
         return text.length() > maxLen ? text.substring(0, maxLen - 1) + "." : text;
     }
 }
+

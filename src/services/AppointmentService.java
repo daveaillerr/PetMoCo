@@ -5,6 +5,7 @@ import dao.PetDAO;
 import models.Appointment;
 import models.Pet;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,6 +24,28 @@ public class AppointmentService {
         this.petDAO = new PetDAO();
     }
 
+    /**
+     * Searches appointments by date.
+     */
+    public List<Appointment> searchAppointmentsByDate(String date, int petOwnerId) {
+        if (date == null || date.trim().isEmpty()) {
+            System.out.println("[Validation] Date cannot be empty.");
+            return new ArrayList<>();
+        }
+        return appointmentDAO.searchByDate(date.trim(), petOwnerId);
+    }
+
+    /**
+     * Searches appointments by status.
+     */
+    public List<Appointment> searchAppointmentsByStatus(String status, int petOwnerId) {
+        if (status == null || status.trim().isEmpty()) {
+            System.out.println("[Validation] Status cannot be empty.");
+            return new ArrayList<>();
+        }
+        return appointmentDAO.searchByStatus(status.trim(), petOwnerId);
+    }    
+    
     // ── Catalog Queries ──────────────────────────────────────────────────────
 
     /**

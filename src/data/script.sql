@@ -6,18 +6,6 @@
 CREATE DATABASE IF NOT EXISTS petmoco_db;
 USE petmoco_db;
 
--- Drop existing tables to avoid schema mismatches with older versions
-DROP TABLE IF EXISTS appointment_service;
-DROP TABLE IF EXISTS appointment;
-DROP TABLE IF EXISTS appointments;
-DROP TABLE IF EXISTS pricing;
-DROP TABLE IF EXISTS services;
-DROP TABLE IF EXISTS pet;
-DROP TABLE IF EXISTS pets;
-DROP TABLE IF EXISTS pet_type;
-DROP TABLE IF EXISTS pet_owner;
-DROP TABLE IF EXISTS users;
-
 -- Users table (for login/authentication)
 CREATE TABLE IF NOT EXISTS users (
     user_id   INT AUTO_INCREMENT PRIMARY KEY,
@@ -107,9 +95,9 @@ CREATE TABLE IF NOT EXISTS appointment_service (
 
 -- Services catalog
 INSERT IGNORE INTO services (service_id, services_name, service_description, service_duration) VALUES
-(1, 'Grooming',     'Full grooming: Bath, Haircut, Nail trim', 60),
-(2, 'Pet Sitting',  'In-home pet sitting and care',            120),
-(3, 'Pet Walking',  'Outdoor walking and exercise session',    45);
+(1, 'Grooming',     'Bath, Haircut, Nail trim',          60),
+(2, 'Pet Sitting',  'In-home pet sitting and care',      120),
+(3, 'Pet Walking',  'Outdoor walking and exercise',      45);
 
 -- Pricing by service and pet size
 INSERT IGNORE INTO pricing (pricing_id, service_id, price, price_type, price_size) VALUES
@@ -128,3 +116,11 @@ INSERT IGNORE INTO pricing (pricing_id, service_id, price, price_type, price_siz
 (10, 3, 250.00, 'FIXED', 'MEDIUM'),
 (11, 3, 300.00, 'FIXED', 'LARGE'),
 (12, 3, 400.00, 'FIXED', 'EXTRA LARGE');
+
+INSERT INTO users (username, password, role)
+VALUES ('admin', '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9', 'ADMIN');
+
+UPDATE services SET service_description = 'Bath, Haircut, Nail trim    ' WHERE service_id = 1;
+UPDATE services SET service_description = 'In-home pet sitting and care' WHERE service_id = 2;
+UPDATE services SET service_description = 'Outdoor walking and exercise' WHERE service_id = 3;
+

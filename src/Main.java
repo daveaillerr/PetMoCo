@@ -1,10 +1,8 @@
-
 import menus.AuthMenu;
 import menus.MainMenu;
 import models.User;
 import utils.ConsoleHelper;
 import utils.DatabaseConfig;
-
 import java.util.Scanner;
 
 /**
@@ -63,4 +61,5 @@ public class Main {
         scanner.close();
         System.out.println("\nThank you for using PetMoCo. See you next time!");
     }
+
 }
