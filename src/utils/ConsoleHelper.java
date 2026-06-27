@@ -14,13 +14,13 @@ import java.util.Scanner;
 public class ConsoleHelper {
 
     // ── ANSI Color Codes ────────────────────────────────────────────────────
-    private static final String RESET  = "\u001B[0m";
-    private static final String BOLD   = "\u001B[1m";
-    private static final String GREEN  = "\u001B[32m";
-    private static final String RED    = "\u001B[31m";
+    private static final String RESET = "\u001B[0m";
+    private static final String BOLD = "\u001B[1m";
+    private static final String GREEN = "\u001B[32m";
+    private static final String RED = "\u001B[31m";
     private static final String YELLOW = "\u001B[33m";
-    private static final String CYAN   = "\u001B[36m";
-    private static final String WHITE  = "\u001B[97m";
+    private static final String CYAN = "\u001B[36m";
+    private static final String WHITE = "\u001B[97m";
 
     // ── Width constant ───────────────────────────────────────────────────────
     private static final int WIDTH = 54;
@@ -35,9 +35,14 @@ public class ConsoleHelper {
     public static void printBanner() {
         System.out.println(CYAN + BOLD);
         System.out.println(LINE);
-        System.out.println(center("***  PetMoCo  ***"));
-        System.out.println(center("Pet Booking System"));
-        System.out.println(LINE);
+        System.out.println("      █████ █████ █████ █   █  ███   ███   ███ ");
+        System.out.println("      █   █ █       █   ██ ██ █   █ █     █   █");
+        System.out.println("      █████ ████    █   █ █ █ █   █ █     █   █");
+        System.out.println("      █     █       █   █   █ █   █ █     █   █");
+        System.out.println("      █     █████   █   █   █  ███   ███   ███ ");
+        System.out.println();
+        System.out.println(YELLOW + center("~ Book a Paw-fect Day~") + RESET);
+        System.out.println(CYAN + BOLD + LINE);
         System.out.println(RESET);
     }
 

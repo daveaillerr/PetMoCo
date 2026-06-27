@@ -311,8 +311,15 @@ public class AppointmentMenu {
             String date = InputValidator.readNonEmptyString(scanner, "Enter date (YYYY-MM-DD)");
             results = appointmentService.searchAppointmentsByDate(date, petOwnerId);
         } else {
-            System.out.println("  Status options: PENDING, APPROVED, CANCELLED, DONE");
-            String status = InputValidator.readNonEmptyString(scanner, "Enter status");
+            System.out.println("  Status options:");
+            System.out.println("    1. PENDING");
+            System.out.println("    2. APPROVED");
+            System.out.println("    3. CANCELLED");
+            System.out.println("    4. DONE");
+            ConsoleHelper.printThinDivider();
+            int statusChoice = InputValidator.readInt(scanner, "Choose status", 1, 4);
+            String[] statuses = {"PENDING", "APPROVED", "CANCELLED", "DONE"};
+            String status = statuses[statusChoice - 1];
             results = appointmentService.searchAppointmentsByStatus(status, petOwnerId);
         }
 
@@ -437,12 +444,12 @@ public class AppointmentMenu {
     }
 
     private void printAppointmentTable(List<Appointment> appointments) {
-        System.out.printf("  %-4s %-10s %-11s %-6s %-10s %8s%n",
+        System.out.printf("  %-4s %-10s %-11s %-10s %-10s %10s%n",
                 "ID", "Pet", "Date", "Time", "Status", "Total");
         ConsoleHelper.printThinDivider();
 
         for (Appointment a : appointments) {
-            System.out.printf("  %-4d %-10s %-11s %-6s %-10s %8.2f%n",
+            System.out.printf("  %-4d %-10s %-11s %-10s %-10s %10.2f%n",
                     a.getAppointmentId(),
                     truncate(a.getPetName(), 10),
                     a.getDate(),
