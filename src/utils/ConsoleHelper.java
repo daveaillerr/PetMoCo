@@ -23,7 +23,7 @@ public class ConsoleHelper {
     private static final String WHITE = "\u001B[97m";
 
     // ── Width constant ───────────────────────────────────────────────────────
-    private static final int WIDTH = 54;
+    private static final int WIDTH = 77;
     private static final String LINE = "=".repeat(WIDTH);
     private static final String THIN = "-".repeat(WIDTH);
 
@@ -35,13 +35,16 @@ public class ConsoleHelper {
     public static void printBanner() {
         System.out.println(CYAN + BOLD);
         System.out.println(LINE);
-        System.out.println("      █████ █████ █████ █   █  ███   ███   ███ ");
-        System.out.println("      █   █ █       █   ██ ██ █   █ █     █   █");
-        System.out.println("      █████ ████    █   █ █ █ █   █ █     █   █");
-        System.out.println("      █     █       █   █   █ █   █ █     █   █");
-        System.out.println("      █     █████   █   █   █  ███   ███   ███ ");
+        System.out.println("\n");
+        System.out.println("     ██████╗   ███████╗ ████████╗ ██      ██╗  ██████╗   ██████╗   ██████╗   ");
+        System.out.println("     ██╔══██╗  ██╔════╝    ██╔══╝ ████  ████║ ██╔═══██╗ ██╔═══██╗ ██╔═══██╗  ");
+        System.out.println("     ██████╔╝  █████╗      ██║    ██╔═██╔═██║ ██║   ██║ ██║   ╚═╝ ██║   ██║  ");
+        System.out.println("     ██╔═══╝   ██═══╝      ██║    ██║ ╚═╝ ██║ ██║   ██║ ██║   ██╗ ██║   ██║  ");
+        System.out.println("     ██║       ███████╗    ██║    ██║     ██║ ╚██████╔╝ ╚██████╔╝ ╚██████╔╝  ");
+        System.out.println("     ╚═╝       ╚══════╝    ╚═╝    ╚═╝     ╚═╝  ╚═════╝   ╚═════╝   ╚═════╝   ");
         System.out.println();
         System.out.println(YELLOW + center("~ Book a Paw-fect Day~") + RESET);
+        System.out.println("\n");
         System.out.println(CYAN + BOLD + LINE);
         System.out.println(RESET);
     }
