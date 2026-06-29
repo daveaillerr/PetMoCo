@@ -1,4 +1,4 @@
-# PetMoCo - Console-Based Pet Booking System
+# PetMoCo: Smart Pet Booking System a Console-Based Java Booking Application
 
 PetMoCo is a professional console-based Java application designed for managing pet care and service bookings. It supports scheduling for Grooming, Sitting, and Walking services, featuring secure password-hashed user authentication and persistent relational database storage via MySQL.
 
