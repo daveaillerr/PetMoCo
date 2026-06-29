@@ -1,165 +1,178 @@
-# 🐾 PetMoCo — Pet Booking System
+# PetMoCo - Console-Based Pet Booking System
 
-A console-based Java application for managing pet service bookings.  
-Supports **Grooming**, **Sitting**, and **Walking** appointments with full user authentication and database persistence.
-
----
-
-## Features
-
-| Feature              | Description                                            |
-| -------------------- | ------------------------------------------------------ |
-| **User Auth**        | Register and log in with password hashing (SHA-256)    |
-| **Pet Management**   | Register, view, update, and remove pets                |
-| **Appointments**     | Book, view, filter by pet, and cancel appointments     |
-| **Service Types**    | Grooming · Sitting · Walking                           |
-| **DB Persistence**   | MySQL via JDBC — all data is saved permanently         |
-| **Input Validation** | Enforces correct formats for dates, times, and numbers |
+PetMoCo is a professional console-based Java application designed for managing pet care and service bookings. It supports scheduling for Grooming, Sitting, and Walking services, featuring secure password-hashed user authentication and persistent relational database storage via MySQL.
 
 ---
 
-## Folder Structure
+## Core Features
 
-```
-PetMoCo/
-├── src/
-│   ├── Main.java
-│   │
-│   ├── models/
-│   │   ├── User.java               ← User entity
-│   │   ├── Pet.java                ← Pet entity
-│   │   └── Appointment.java        ← Appointment entity
-│   ├── services/
-│   │   ├── UserService.java        ← Register & login logic + password hashing
-│   │   ├── PetService.java         ← Pet business logic
-│   │   └── AppointmentService.java ← Appointment business logic
-│   ├── dao/
-│   │   ├── UserDAO.java            ← DB queries for users
-│   │   ├── PetDAO.java             ← DB queries for pets
-│   │   └── AppointmentDAO.java     ← DB queries for appointments
-│   ├── utils/
-│   │   ├── DatabaseConfig.java     ← JDBC connection manager
-│   │   ├── ConsoleHelper.java      ← Banners, dividers, feedback
-│   │   └── InputValidator.java     ← Typed, validated input readers
-│   ├── menus/
-│   │   ├── AuthMenu.java           ← Login / Register screen
-│   │   ├── MainMenu.java           ← Top-level router
-│   │   ├── PetMenu.java            ← Pet management menu
-│   │   └── AppointmentMenu.java    ← Appointment management menu
-│   └── data/
-│       └── script.sql              ← Database setup script
-├── lib/
-│   ├── mysql-connector-j-9.7.0.jar
-│   └── dotenv-java-3.0.0.jar
-├── .env                            ← DB credentials (not committed to git)
-├── .gitignore
-├── README.md
-└── CLAUDE.md
-```
+| Module | Description |
+| :--- | :--- |
+| **Authentication** | Secure user registration and login with SHA-256 password hashing. |
+| **Pet Management** | Full CRUD operations (Register, View, Update, and Remove) for pet profiles. |
+| **Appointment Scheduling** | Book, view, filter by pet, and cancel appointments for various service types. |
+| **Service Support** | Pre-configured service types: Grooming, Sitting, and Walking. |
+| **Database Persistence** | Permanent storage using MySQL database via Java Database Connectivity (JDBC). |
+| **Robust Validation** | Type-safe input parsing that enforces correct formats for dates, times, and numerical inputs. |
 
 ---
 
 ## Technologies Used
 
-| Technology                | Purpose                    |
-| ------------------------- | -------------------------- |
-| Java 17+                  | Core application language  |
-| JDBC (MySQL)              | Database connectivity      |
-| MySQL                     | Relational database        |
-| dotenv-java               | Loading `.env` credentials |
-| SHA-256 (`java.security`) | Password hashing           |
-| Scanner                   | Console input              |
+*   **Java 17+** - Core language execution and application runtime environment.
+*   **MySQL & JDBC** - Relational database engine and JDBC API for secure database queries.
+*   **dotenv-java** - Lightweight library to load environmental configurations from a `.env` file.
+*   **SHA-256 Encryption** - Built-in security algorithm (`java.security`) for storing hashed passwords.
+*   **Scanner Input API** - Text-based user interaction and menu navigation framework.
 
 ---
 
-## How to Run
+## System Architecture & File Structure
+
+The project is structured according to clean code principles, separating database connections, data access objects, and UI menus.
+
+```text
+PetMoCo/
+├── src/
+│   ├── Main.java                   - Application entry point
+│   ├── models/                     - Enterprise domain models
+│   │   ├── User.java               - User base class
+│   │   ├── Pet.java                - Pet entity model
+│   │   └── Appointment.java        - Appointment details model
+│   ├── services/                   - Service and business logic layers
+│   │   ├── UserService.java        - Account creation and authentication logic
+│   │   ├── PetService.java         - Pet profiles and validation rules
+│   │   └── AppointmentService.java - Appointment flow validations
+│   ├── dao/                        - Data Access Objects (SQL queries)
+│   │   ├── UserDAO.java            - Database operations for users and owners
+│   │   ├── PetDAO.java             - Database operations for pets
+│   │   └── AppointmentDAO.java     - Database operations for appointments
+│   ├── utils/                      - Core utilities and helpers
+│   │   ├── DatabaseConfig.java     - Connection manager singleton
+│   │   ├── ConsoleHelper.java      - Screen rendering and formatting UI helpers
+│   │   └── InputValidator.java     - Type-safe, validated keyboard input reader
+│   ├── menus/                      - User Interface menus
+│   │   ├── AuthMenu.java           - Registration and login UI workflows
+│   │   ├── MainMenu.java           - Primary dashboard menu router
+│   │   ├── PetMenu.java            - Pet management UI console
+│   │   └── AppointmentMenu.java    - Appointment booking UI console
+│   └── data/                       - SQL schemas and setup files
+│       └── script.sql              - Database initialization script
+├── lib/                            - External dependencies (JAR files)
+│   ├── mysql-connector-j-9.7.0.jar
+│   └── dotenv-java-3.0.0.jar
+├── .env                            - Local configuration parameters (gitignored)
+├── .gitignore                      - Standard Git ignores
+└── README.md                       - Documentation (this file)
+```
+
+---
+
+## Technical Flow and Navigation
+
+The interface provides an interactive, structured flow that drives users from verification to service selection.
+
+```mermaid
+graph TD
+    Start([App Start]) --> DBCheck{Database Connection Test}
+    DBCheck -- Connection Fails --> ExitError[Display Connection Error & Exit]
+    DBCheck -- Connection Success --> AuthMenu[Auth Menu]
+    
+    AuthMenu --> ActionLogin[1. Log In]
+    AuthMenu --> ActionRegister[2. Register]
+    AuthMenu --> ActionExit[0. Exit App]
+    
+    ActionRegister --> FormReg[Input Registration Data] --> ActionLogin
+    ActionLogin --> FormCreds[Input Credentials & Hash Check] --> MainMenu[Main Dashboard Menu]
+    
+    MainMenu --> PetMgr[1. Manage Pets]
+    MainMenu --> ApptMgr[2. Manage Appointments]
+    MainMenu --> LogOut[0. Log Out & Exit]
+    
+    PetMgr --> PetCRUD[Register / View All / Details / Update / Remove / Back] --> PetMgr
+    ApptMgr --> ApptCRUD[Book / View All / Filter by Pet / Cancel / Back] --> ApptMgr
+```
+
+---
+
+## Setup and Execution Guide
+
+Follow these steps to configure, build, and run the project locally.
 
 ### 1. Prerequisites
 
-- Java 17 or higher installed
-- MySQL server running locally
-- The `lib/` directory contains both JARs
+Before starting, ensure you have:
+*   Java Development Kit (JDK) 17 or higher installed and added to your path.
+*   A running instance of MySQL server.
+*   The required libraries present in the `lib` directory.
 
-### 2. Set Up the Database
+### 2. Database Initialization
 
-Run the SQL script to create the database and tables:
+Run the provided setup script on your SQL server to create the database schemas and initialize the user accounts:
 
 ```sql
--- In MySQL Workbench or CLI:
+-- Connect to your MySQL shell or Workbench and execute:
 source src/data/script.sql
 ```
 
-A default admin account is seeded: **username:** `admin` **password:** `admin123`
+> [!NOTE]
+> The database initialization script automatically seeds a default administrator account.
+> *   **Username**: admin
+> *   **Password**: admin123
 
-### 3. Configure `.env`
+### 3. Environment Configuration
 
-The `.env` file in the project root must contain:
+Create a file named `.env` in the root directory of the project and populate it with your local database connection details:
 
-```
+```ini
 DB_URL=jdbc:mysql://localhost:3306/petmoco_db
 DB_USER=root
-DB_PASSWORD=your_password_here
+DB_PASSWORD=your_mysql_password_here
 ```
 
-### 4. Compile
+### 4. Compilation
 
+From the root directory of the project, compile the Java source files.
+
+**On Windows (PowerShell):**
 ```powershell
-# From the project root
 javac -cp "lib/*" -d out (Get-ChildItem src -Recurse -Filter "*.java" | Select-Object -ExpandProperty FullName)
 ```
 
-Or in a single command on Linux/macOS:
-
+**On Linux / macOS:**
 ```bash
 javac -cp "lib/*" -d out $(find src -name "*.java")
 ```
 
-### 5. Run
+### 5. Running the Application
 
+Execute the compiled class files from the output directory.
+
+**On Windows (PowerShell):**
 ```powershell
 java -cp "out;lib/*" main.Main
 ```
 
-On Linux/macOS:
-
+**On Linux / macOS:**
 ```bash
 java -cp "out:lib/*" main.Main
 ```
 
-### 6. VSCode (Recommended)
+### 6. VS Code Configuration (Optional)
 
-Open the folder in VSCode with the **Extension Pack for Java** installed.  
-The `.vscode/settings.json` is pre-configured — just press **Run** on `Main.java`.
-
----
-
-## Console Navigation Flow
-
-```
-App Start
-  └── Welcome Banner
-        └── DB Connection Test
-              ├── FAIL → Error message → Exit
-              └── OK  → Auth Menu
-                          ├── 1. Log In → [credentials] → Main Menu
-                          ├── 2. Register → [new account] → Main Menu
-                          └── 0. Exit
-                    Main Menu (after login)
-                          ├── 1. Manage Pets
-                          │       ├── Register / View All / Details / Update / Remove
-                          │       └── 0. Back
-                          ├── 2. Manage Appointments
-                          │       ├── Book / View All / By Pet / Cancel
-                          │       └── 0. Back
-                          └── 0. Log Out & Exit
-```
+If using VS Code:
+1. Install the **Extension Pack for Java**.
+2. Open the project root folder.
+3. Locate `src/Main.java` and click **Run** above the `main` method (the `.vscode/settings.json` is already configured to reference local dependencies).
 
 ---
 
-## Important Notes
+## Important System Behaviors
 
-- **Passwords** are never stored in plain text — SHA-256 hashing is applied before saving to the database.
-- **Deleting a pet** also deletes all of its appointments (database CASCADE).
-- **Cancelling** an appointment sets its status to `CANCELLED` — it is not deleted from the database.
-- The app reads DB credentials from `.env` — keep this file out of version control (already in `.gitignore`).
-- Date format: `YYYY-MM-DD` · Time format: `HH:MM` (24-hour)
+*   **Security Standards**: Passwords are securely hashed using SHA-256 before insertion. The system does not store or transmit cleartext passwords.
+*   **Cascade Deletions**: Deleting a pet profile automatically cascade-deletes all associated appointments from the database.
+*   **Soft Cancellation**: Cancelling an appointment updates its status to `CANCELLED` within the database. It is not physically deleted, preserving historical records.
+*   **Configuration Isolation**: The `.env` file contains sensitive local credentials and should never be committed to git repositories.
+*   **Input Formatting Rules**:
+    *   **Dates**: Must adhere to the `YYYY-MM-DD` format (e.g., 2026-06-29).
+    *   **Times**: Must adhere to the 24-hour `HH:MM` format (e.g., 14:30).
