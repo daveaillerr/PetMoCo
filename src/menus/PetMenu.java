@@ -11,12 +11,6 @@ import utils.InputValidator;
 import java.util.List;
 import java.util.Scanner;
 
-/**
- * PetMenu — Console UI for pet management.
- *
- * Options: Register / View All / Details / Update / Remove
- * Loops until the user picks 0 (Back).
- */
 public class PetMenu {
 
     private static final String[] SIZE_OPTIONS = { "SMALL", "MEDIUM", "LARGE", "EXTRA LARGE" };
@@ -31,19 +25,14 @@ public class PetMenu {
         this.currentUser = currentUser;
         this.petService = new PetService();
 
-        // Resolve the pet_owner_id from the users.user_id
         if (currentUser instanceof PetOwner) {
             UserDAO userDAO = new UserDAO();
             this.petOwnerId = userDAO.findPetOwnerIdByUserId(currentUser.getId());
         } else {
-            // Admins can view all pets but don't own pets themselves
             this.petOwnerId = -1;
         }
     }
 
-    /**
-     * Shows the pet management menu and loops until the user goes back.
-     */
     public void show() {
         while (true) {
             ConsoleHelper.printHeader("Manage Pets");
@@ -52,39 +41,31 @@ public class PetMenu {
             System.out.println("  3. View Pet Details");
             System.out.println("  4. Update Pet Info");
             System.out.println("  5. Remove a Pet");
-            System.out.println("  6. Search Pet");
             System.out.println("  0. Back");
             ConsoleHelper.printThinDivider();
 
-            int choice = InputValidator.readInt(scanner, "Choose an option", 0, 6);
+            int choice = InputValidator.readInt(scanner, "Choose an option", 0, 5);
 
             switch (choice) {
-                case 1: handleRegister(); break;
-                case 2: handleViewAll();  break;
-                case 3: handleDetails();  break;
-                case 4: handleUpdate();   break;
-                case 5: handleRemove();   break;
-                case 6: handleSearch();   break;
-                case 0: return;
+                case 1:
+                    handleRegister();
+                    break;
+                case 2:
+                    handleViewAll();
+                    break;
+                case 3:
+                    handleDetails();
+                    break;
+                case 4:
+                    handleUpdate();
+                    break;
+                case 5:
+                    handleRemove();
+                    break;
+                case 0:
+                    return;
             }
         }
-    }
-
-// ── NEW: Search Pet method ───────────────────────────────────────────────
-    private void handleSearch() {
-        ConsoleHelper.printHeader("Search Pet");
-
-        String keyword = InputValidator.readNonEmptyString(scanner, "Enter pet name to search");
-
-        List<Pet> results = petService.searchPetsByName(keyword, petOwnerId);
-
-        if (results.isEmpty()) {
-            ConsoleHelper.printInfo("No pets found matching \"" + keyword + "\".");
-        } else {
-            ConsoleHelper.printSuccess(results.size() + " pet(s) found:");
-            printPetTable(results);
-        }
-        ConsoleHelper.pause(scanner);
     }
 
     // ── 1. Register Pet ──────────────────────────────────────────────────────
@@ -98,9 +79,9 @@ public class PetMenu {
             return;
         }
 
-        String name = InputValidator.readNonEmptyString(scanner, "Pet name");
-        String type = InputValidator.readNonEmptyString(scanner, "Pet type (Dog, Cat)");
-        String breed = InputValidator.readNonEmptyString(scanner, "Breed");
+        String name = toTitleCase(InputValidator.readNonEmptyString(scanner, "Pet name"));
+        String type = toTitleCase(InputValidator.readNonEmptyString(scanner, "Pet type (Dog, Cat)"));
+        String breed = toTitleCase(InputValidator.readNonEmptyString(scanner, "Breed"));
         String size = readSize();
         String notes = InputValidator.readOptionalString(scanner, "Notes");
 
@@ -166,11 +147,51 @@ public class PetMenu {
         ConsoleHelper.printThinDivider();
         ConsoleHelper.printInfo("Leave a field blank to keep the current value.");
 
+        // Get current type info
+        String[] typeInfo = petService.getPetTypeDetails(pet.getTypeId());
+        String currentType = (typeInfo != null) ? typeInfo[0] : "?";
+        String currentBreed = (typeInfo != null) ? typeInfo[1] : "?";
+        String currentSize = (typeInfo != null) ? typeInfo[2] : "?";
+
         // Name
         ConsoleHelper.printPrompt("New name [" + pet.getName() + "]");
         String newName = scanner.nextLine().trim();
         if (!newName.isEmpty()) {
-            pet.setName(newName);
+            pet.setName(toTitleCase(newName));
+        }
+
+        // Type
+        ConsoleHelper.printPrompt("New type [" + currentType + "]");
+        String newType = scanner.nextLine().trim();
+        if (newType.isEmpty()) {
+            newType = currentType;
+        } else {
+            newType = toTitleCase(newType);
+        }
+
+        // Breed
+        ConsoleHelper.printPrompt("New breed [" + currentBreed + "]");
+        String newBreed = scanner.nextLine().trim();
+        if (newBreed.isEmpty()) {
+            newBreed = currentBreed;
+        } else {
+            newBreed = toTitleCase(newBreed);
+        }
+
+        // Size
+        ConsoleHelper.printPrompt("New size [" + currentSize + "] (leave blank to keep)");
+        System.out.println("    1. SMALL  2. MEDIUM  3. LARGE  4. EXTRA LARGE");
+        String sizeInput = scanner.nextLine().trim();
+        String newSize = currentSize;
+        if (!sizeInput.isEmpty()) {
+            try {
+                int sizeChoice = Integer.parseInt(sizeInput);
+                if (sizeChoice >= 1 && sizeChoice <= 4) {
+                    newSize = SIZE_OPTIONS[sizeChoice - 1];
+                }
+            } catch (NumberFormatException e) {
+                // Keep current size
+            }
         }
 
         // Notes
@@ -180,7 +201,8 @@ public class PetMenu {
             pet.setNotes(newNotes);
         }
 
-        boolean success = petService.updatePet(pet);
+        // Update pet type (get or create the new combination)
+        boolean success = petService.updatePetFull(pet, newType, newBreed, newSize);
         if (success) {
             ConsoleHelper.printSuccess("Pet updated successfully!");
         } else {
@@ -223,11 +245,8 @@ public class PetMenu {
 
     // ── Display Helpers ──────────────────────────────────────────────────────
 
-    /**
-     * Prints a table of pets with their type details.
-     */
     private void printPetTable(List<Pet> pets) {
-        System.out.printf("  %-4s %-12s %-8s %-12s %-10s%n",
+        System.out.printf("  %-5s %-15s %-10s %-15s %-10s%n",
                 "ID", "Name", "Type", "Breed", "Size");
         ConsoleHelper.printThinDivider();
 
@@ -237,26 +256,11 @@ public class PetMenu {
             String breed = (typeInfo != null) ? typeInfo[1] : "?";
             String size = (typeInfo != null) ? typeInfo[2] : "?";
 
-            System.out.printf("  %-4d %-12s %-8s %-12s %-10s%n",
-                    pet.getId(),
-                    truncate(pet.getName(), 12),
-                    truncate(type, 8),
-                    truncate(breed, 12),
-                    truncate(size, 10));
+            System.out.printf("  %-5d %-15s %-10s %-15s %-10s%n",
+                    pet.getId(), pet.getName(), type, breed, size);
         }
     }
 
-    /**
-     * Truncates text to fit column width.
-     */
-    private String truncate(String text, int maxLen) {
-        if (text == null) return "?";
-        return text.length() > maxLen ? text.substring(0, maxLen - 1) + "." : text;
-    }
-
-    /**
-     * Prints full details of a single pet.
-     */
     private void printPetDetails(Pet pet) {
         String[] typeInfo = petService.getPetTypeDetails(pet.getTypeId());
         String type = (typeInfo != null) ? typeInfo[0] : "?";
@@ -271,9 +275,6 @@ public class PetMenu {
         System.out.println("  Notes     : " + (pet.getNotes() != null ? pet.getNotes() : "-"));
     }
 
-    /**
-     * Presents the size options as a numbered list and returns the selection.
-     */
     private String readSize() {
         System.out.println("  Select pet size:");
         for (int i = 0; i < SIZE_OPTIONS.length; i++) {
@@ -281,5 +282,24 @@ public class PetMenu {
         }
         int choice = InputValidator.readInt(scanner, "Enter size number", 1, SIZE_OPTIONS.length);
         return SIZE_OPTIONS[choice - 1];
+    }
+
+    /**
+     * Converts a string to Title Case (first letter uppercase, rest lowercase).
+     * Example: "golden retriever" → "Golden Retriever"
+     */
+    private String toTitleCase(String input) {
+        if (input == null || input.isEmpty())
+            return input;
+        String[] words = input.toLowerCase().split("\\s+");
+        StringBuilder result = new StringBuilder();
+        for (String word : words) {
+            if (word.length() > 0) {
+                result.append(Character.toUpperCase(word.charAt(0)))
+                        .append(word.substring(1))
+                        .append(" ");
+            }
+        }
+        return result.toString().trim();
     }
 }

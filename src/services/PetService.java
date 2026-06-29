@@ -23,16 +23,16 @@ public class PetService {
     /**
      * Registers a new pet after validating inputs.
      *
-     * @param ownerId   the pet_owner_id of the logged-in pet owner
-     * @param petName   the name of the pet (must not be empty)
-     * @param petType   the animal type, e.g. "Dog" (must not be empty)
-     * @param petBreed  the breed, e.g. "Labrador" (must not be empty)
-     * @param petSize   the size category, e.g. "MEDIUM" (must not be empty)
-     * @param notes     optional notes (may be empty)
+     * @param ownerId  the pet_owner_id of the logged-in pet owner
+     * @param petName  the name of the pet (must not be empty)
+     * @param petType  the animal type, e.g. "Dog" (must not be empty)
+     * @param petBreed the breed, e.g. "Labrador" (must not be empty)
+     * @param petSize  the size category, e.g. "MEDIUM" (must not be empty)
+     * @param notes    optional notes (may be empty)
      * @return true if the pet was registered successfully
      */
     public boolean registerPet(int ownerId, String petName, String petType,
-                               String petBreed, String petSize, String notes) {
+            String petBreed, String petSize, String notes) {
         // Validate required fields
         if (petName == null || petName.trim().isEmpty()) {
             System.out.println("[Validation] Pet name cannot be empty.");
@@ -97,14 +97,25 @@ public class PetService {
     }
 
     /**
-     * Updates a pet's name and notes.
+     * Updates a pet's name, notes, AND pet type (type/breed/size).
+     * Used when the user wants to change all editable fields.
      */
-    public boolean updatePet(Pet pet) {
+    public boolean updatePetFull(Pet pet, String petType, String petBreed, String petSize) {
         if (pet.getName() == null || pet.getName().trim().isEmpty()) {
             System.out.println("[Validation] Pet name cannot be empty.");
             return false;
         }
-        return petDAO.update(pet);
+
+        // Get or create the new pet type combination
+        int newTypeId = petDAO.getOrCreatePetType(petType.trim().toUpperCase(), petBreed.trim(),
+                petSize.trim().toUpperCase());
+
+        if (newTypeId == -1) {
+            System.out.println("[Validation] Failed to resolve pet type.");
+            return false;
+        }
+
+        return petDAO.updateFull(pet, newTypeId);
     }
 
     /**
@@ -114,10 +125,11 @@ public class PetService {
         return petDAO.delete(petId);
     }
 
-        /**
+    /**
      * Searches pets by name keyword.
-     * @param keyword  the search term (partial match)
-     * @param ownerId  the pet_owner_id, or -1 for admin (all pets)
+     * 
+     * @param keyword the search term (partial match)
+     * @param ownerId the pet_owner_id, or -1 for admin (all pets)
      */
     public List<Pet> searchPetsByName(String keyword, int ownerId) {
         if (keyword == null || keyword.trim().isEmpty()) {

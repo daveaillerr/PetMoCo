@@ -93,10 +93,10 @@ public class PetDAO {
             stmt.setInt(1, petTypeId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new String[]{
-                    rs.getString("pet_type"),
-                    rs.getString("pet_breed"),
-                    rs.getString("pet_size")
+                return new String[] {
+                        rs.getString("pet_type"),
+                        rs.getString("pet_breed"),
+                        rs.getString("pet_size")
                 };
             }
         } catch (SQLException e) {
@@ -133,7 +133,7 @@ public class PetDAO {
      */
     public List<Pet> findByOwnerId(int ownerId) {
         String sql = "SELECT p.pet_id, p.pet_owner_id, p.pet_type_id, p.pet_name, p.pet_notes "
-                   + "FROM pet p WHERE p.pet_owner_id = ?";
+                + "FROM pet p WHERE p.pet_owner_id = ?";
         List<Pet> pets = new ArrayList<>();
         try {
             Connection conn = DatabaseConfig.getConnection();
@@ -187,7 +187,7 @@ public class PetDAO {
         return null;
     }
 
-        /**
+    /**
      * Searches pets by name keyword (case-insensitive LIKE match).
      * If ownerId is -1, searches all pets (admin). Otherwise filters by owner.
      */
@@ -195,10 +195,10 @@ public class PetDAO {
         String sql;
         if (ownerId == -1) {
             sql = "SELECT pet_id, pet_owner_id, pet_type_id, pet_name, pet_notes "
-                + "FROM pet WHERE pet_name LIKE ?";
+                    + "FROM pet WHERE pet_name LIKE ?";
         } else {
             sql = "SELECT pet_id, pet_owner_id, pet_type_id, pet_name, pet_notes "
-                + "FROM pet WHERE pet_name LIKE ? AND pet_owner_id = ?";
+                    + "FROM pet WHERE pet_name LIKE ? AND pet_owner_id = ?";
         }
 
         List<Pet> pets = new ArrayList<>();
@@ -220,21 +220,22 @@ public class PetDAO {
     }
 
     /**
-     * Updates a pet's name and notes.
+     * Updates a pet's name, notes, AND pet_type_id.
      *
      * @return true if the update affected a row
      */
-    public boolean update(Pet pet) {
-        String sql = "UPDATE pet SET pet_name = ?, pet_notes = ? WHERE pet_id = ?";
+    public boolean updateFull(Pet pet, int newPetTypeId) {
+        String sql = "UPDATE pet SET pet_name = ?, pet_notes = ?, pet_type_id = ? WHERE pet_id = ?";
         try {
             Connection conn = DatabaseConfig.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, pet.getName());
             stmt.setString(2, pet.getNotes());
-            stmt.setInt(3, pet.getId());
+            stmt.setInt(3, newPetTypeId);
+            stmt.setInt(4, pet.getId());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.out.println("[DB] Update pet failed: " + e.getMessage());
+            System.out.println("[DB] Update pet (full) failed: " + e.getMessage());
             return false;
         }
     }
@@ -261,11 +262,10 @@ public class PetDAO {
 
     private Pet mapRow(ResultSet rs) throws SQLException {
         return new Pet(
-            rs.getInt("pet_id"),
-            rs.getInt("pet_owner_id"),
-            rs.getInt("pet_type_id"),
-            rs.getString("pet_name"),
-            rs.getString("pet_notes")
-        );
+                rs.getInt("pet_id"),
+                rs.getInt("pet_owner_id"),
+                rs.getInt("pet_type_id"),
+                rs.getString("pet_name"),
+                rs.getString("pet_notes"));
     }
 }
